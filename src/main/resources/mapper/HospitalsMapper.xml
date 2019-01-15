@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.saler.mapper.HospitalsMapper">
+  <resultMap id="BaseResultMap" type="com.saler.pojo.Hospitals">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="hospital_id" jdbcType="NVARCHAR" property="hospitalId" />
+    <result column="name_cn" jdbcType="NVARCHAR" property="nameCn" />
+    <result column="name_en" jdbcType="NVARCHAR" property="nameEn" />
+    <result column="complete_name" jdbcType="NVARCHAR" property="completeName" />
+    <result column="tier" jdbcType="NVARCHAR" property="tier" />
+    <result column="grade" jdbcType="NVARCHAR" property="grade" />
+    <result column="type" jdbcType="NVARCHAR" property="type" />
+    <result column="style" jdbcType="NVARCHAR" property="style" />
+    <result column="city_id" jdbcType="NVARCHAR" property="cityId" />
+    <result column="status" jdbcType="NVARCHAR" property="status" />
+    <result column="postalcode" jdbcType="NVARCHAR" property="postalcode" />
+    <result column="noofbeds" jdbcType="INTEGER" property="noofbeds" />
+    <result column="telno" jdbcType="NVARCHAR" property="telno" />
+    <result column="address" jdbcType="NVARCHAR" property="address" />
+    <result column="comments" jdbcType="NVARCHAR" property="comments" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
+    <result column="city_name" jdbcType="NVARCHAR" property="cityName" />
+    <result column="province_id" jdbcType="NVARCHAR" property="provinceId" />
+    <result column="province_name" jdbcType="NVARCHAR" property="provinceName" />
+    <result column="modifyon" jdbcType="TIMESTAMP" property="modifyon" />
+    <result column="modifyby" jdbcType="NVARCHAR" property="modifyby" />
+    <result column="createby" jdbcType="NVARCHAR" property="createby" />
+    <result column="createon" jdbcType="TIMESTAMP" property="createon" />
+  </resultMap>
+</mapper>

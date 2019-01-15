@@ -1,0 +1,196 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.saler</groupId>
+	<artifactId>saler</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>saler</name>
+	<description>Demo project for Spring Boot</description>
+
+
+	<!--版本控制 -->
+	<properties>
+		<java.version>1.8</java.version>
+		<pagehelper.version>1.2.1</pagehelper.version>
+	</properties>
+	<!--引入sringboot父类依赖 -->
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.0.1.RELEASE</version>
+	</parent>
+
+	<dependencies>
+		<!--SpringBoot web 组件 spring+springmcv+mybatis -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Spring Boot的JPA依赖包 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<!-- MyBatis -->
+
+		<dependency>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter</artifactId>
+			<version>1.3.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.47</version>
+		</dependency>
+		
+		<!--mysql -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+<!-- 			<version>5.1.29</version>
+ -->		</dependency>
+		<!--sqlserver -->
+		<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>sqljdbc4</artifactId>
+			<version>4.0</version>
+		</dependency>
+
+
+		<!-- SpringBoot - MyBatis 逆向工程 -->
+		<dependency>
+			<groupId>org.mybatis.generator</groupId>
+			<artifactId>mybatis-generator-core</artifactId>
+			<version>1.3.3</version>
+		</dependency>
+		<!-- MyBatis 通用 Mapper -->
+		<dependency>
+			<groupId>tk.mybatis</groupId>
+			<artifactId>mapper-spring-boot-starter</artifactId>
+			<version>1.1.4</version>
+		</dependency>
+
+		<!-- 阿里系的Druid依赖包 -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+		<!--java+sf -->
+		<dependency>
+			<groupId>com.force.api</groupId>
+			<artifactId>force-wsc</artifactId>
+			<version>38.0.4</version>
+		</dependency>
+		<dependency>
+			<groupId>rhino</groupId>
+			<artifactId>js</artifactId>
+			<version>1.7R2</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+
+		<!-- <dependency>
+			<groupId>com.sf</groupId>
+			<artifactId>wst-c</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/resources/lib/com.sf.jar</systemPath>
+		</dependency> -->
+		
+		<dependency>
+			<groupId>com.sf</groupId>
+			<artifactId>wst-c</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/lib/com.sf.jar</systemPath>
+
+		</dependency>
+
+	</dependencies>
+
+
+
+	<build>
+		<plugins>
+			<!-- MyBatis 逆向工程 插件 -->
+			<plugin>
+				<groupId>org.mybatis.generator</groupId>
+				<artifactId>mybatis-generator-maven-plugin</artifactId>
+				<version>1.3.3</version>
+				<dependencies>
+					<dependency>
+						<groupId>mysql</groupId>
+						<artifactId>mysql-connector-java</artifactId>
+						<version>${mysql.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>tk.mybatis</groupId>
+						<artifactId>mapper</artifactId>
+						<version>3.4.3</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<!-- 允许移动生成的文件 -->
+					<verbose>true</verbose>
+					<!-- 是否覆盖 -->
+					<overwrite>true</overwrite>
+					<!-- 配置文件 -->
+					<configurationFile>
+						${basedir}/src/main/resources/generator/generatorConfig.xml
+					</configurationFile>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/lib</directory>
+				<targetPath>BOOT-INF/lib/</targetPath>
+				<includes>
+					<include>**/*.jar</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<targetPath>BOOT-INF/classes/</targetPath>
+			</resource>
+		</resources>
+
+	</build>
+
+
+
+</project>

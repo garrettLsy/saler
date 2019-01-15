@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.saler.mapper.DirectionMapper">
+  <resultMap id="BaseResultMap" type="com.saler.pojo.Direction">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="mon" jdbcType="NVARCHAR" property="mon" />
+    <result column="dist_id" jdbcType="NVARCHAR" property="distId" />
+    <result column="dist_name" jdbcType="NVARCHAR" property="distName" />
+    <result column="style" jdbcType="NVARCHAR" property="style" />
+    <result column="province_name_cn" jdbcType="NVARCHAR" property="provinceNameCn" />
+    <result column="pharm_id" jdbcType="NVARCHAR" property="pharmId" />
+    <result column="pharm_name_ce" jdbcType="NVARCHAR" property="pharmNameCe" />
+    <result column="hospital_id" jdbcType="NVARCHAR" property="hospitalId" />
+    <result column="hospital" jdbcType="NVARCHAR" property="hospital" />
+    <result column="sales_date" jdbcType="TIMESTAMP" property="salesDate" />
+    <result column="brand" jdbcType="NVARCHAR" property="brand" />
+    <result column="product_name" jdbcType="NVARCHAR" property="productName" />
+    <result column="product_name_en" jdbcType="NVARCHAR" property="productNameEn" />
+    <result column="qty" jdbcType="INTEGER" property="qty" />
+    <result column="product_id" jdbcType="NVARCHAR" property="productId" />
+    <result column="version" jdbcType="NVARCHAR" property="version" />
+    <result column="type" jdbcType="NVARCHAR" property="type" />
+    <result column="amap_id" jdbcType="NVARCHAR" property="amapId" />
+    <result column="group_name" jdbcType="NVARCHAR" property="groupName" />
+  </resultMap>
+</mapper>

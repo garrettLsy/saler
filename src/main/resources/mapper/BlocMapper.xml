@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.saler.mapper.BlocMapper">
+  <resultMap id="BaseResultMap" type="com.saler.pojo.Bloc">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" jdbcType="NVARCHAR" property="id" />
+    <result column="period" jdbcType="TIMESTAMP" property="period" />
+    <result column="hospital_id" jdbcType="NVARCHAR" property="hospitalId" />
+    <result column="segmentation" jdbcType="NVARCHAR" property="segmentation" />
+    <result column="chain" jdbcType="NVARCHAR" property="chain" />
+    <result column="chain_en" jdbcType="NVARCHAR" property="chainEn" />
+    <result column="modifyon" jdbcType="TIMESTAMP" property="modifyon" />
+    <result column="modifyby" jdbcType="NVARCHAR" property="modifyby" />
+    <result column="createby" jdbcType="NVARCHAR" property="createby" />
+    <result column="createon" jdbcType="TIMESTAMP" property="createon" />
+    <result column="deleted" jdbcType="NVARCHAR" property="deleted" />
+    <result column="taid" jdbcType="NVARCHAR" property="taid" />
+  </resultMap>
+</mapper>
