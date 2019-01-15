@@ -48,7 +48,7 @@ public class DirectionService extends LoggerUtil{
 		if(null!=beginTime&&null!=endTime) {
 			example.createCriteria().andGreaterThanOrEqualTo("salesDate",beginTime).andLessThanOrEqualTo("salesDate",endTime);
 		}
-		List<Direction> list=dm.selectByExample(example).subList(0, 10);
+		List<Direction> list=dm.selectByExample(example);
 
 		/*try {
 			async.addMysqlDirction(restTemplate, list, timeVersion);
