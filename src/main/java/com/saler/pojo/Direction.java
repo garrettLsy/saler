@@ -5,6 +5,9 @@ import java.util.Date;
 import javax.persistence.*;
 
 public class Direction implements Serializable {
+    @Column(name = "amap_id")
+    private String amapId;
+
     private String mon;
 
     @Column(name = "dist_id")
@@ -15,14 +18,17 @@ public class Direction implements Serializable {
 
     private String style;
 
+    @Column(name = "group_name")
+    private String groupName;
+
     @Column(name = "province_name_cn")
     private String provinceNameCn;
 
-    @Column(name = "pharm_id")
+    @Column(name = "Pharm_id")
     private String pharmId;
 
-    @Column(name = "pharm_name_ce")
-    private String pharmNameCe;
+    @Column(name = "pharm_name_cn")
+    private String pharmNameCn;
 
     @Column(name = "hospital_id")
     private String hospitalId;
@@ -40,22 +46,27 @@ public class Direction implements Serializable {
     @Column(name = "product_name_en")
     private String productNameEn;
 
-    private Integer qty;
+    @Column(name = "QTY")
+    private Double qty;
 
     @Column(name = "product_id")
     private String productId;
 
-    private String version;
-
-    private String type;
-
-    @Column(name = "amap_id")
-    private String amapId;
-
-    @Column(name = "group_name")
-    private String groupName;
-
     private static final long serialVersionUID = 1L;
+
+    /**
+     * @return amap_id
+     */
+    public String getAmapId() {
+        return amapId;
+    }
+
+    /**
+     * @param amapId
+     */
+    public void setAmapId(String amapId) {
+        this.amapId = amapId;
+    }
 
     /**
      * @return mon
@@ -114,6 +125,20 @@ public class Direction implements Serializable {
     }
 
     /**
+     * @return group_name
+     */
+    public String getGroupName() {
+        return groupName;
+    }
+
+    /**
+     * @param groupName
+     */
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
+    /**
      * @return province_name_cn
      */
     public String getProvinceNameCn() {
@@ -128,7 +153,7 @@ public class Direction implements Serializable {
     }
 
     /**
-     * @return pharm_id
+     * @return Pharm_id
      */
     public String getPharmId() {
         return pharmId;
@@ -142,17 +167,17 @@ public class Direction implements Serializable {
     }
 
     /**
-     * @return pharm_name_ce
+     * @return pharm_name_cn
      */
-    public String getPharmNameCe() {
-        return pharmNameCe;
+    public String getPharmNameCn() {
+        return pharmNameCn;
     }
 
     /**
-     * @param pharmNameCe
+     * @param pharmNameCn
      */
-    public void setPharmNameCe(String pharmNameCe) {
-        this.pharmNameCe = pharmNameCe;
+    public void setPharmNameCn(String pharmNameCn) {
+        this.pharmNameCn = pharmNameCn;
     }
 
     /**
@@ -240,16 +265,16 @@ public class Direction implements Serializable {
     }
 
     /**
-     * @return qty
+     * @return QTY
      */
-    public Integer getQty() {
+    public Double getQty() {
         return qty;
     }
 
     /**
      * @param qty
      */
-    public void setQty(Integer qty) {
+    public void setQty(Double qty) {
         this.qty = qty;
     }
 
@@ -267,75 +292,21 @@ public class Direction implements Serializable {
         this.productId = productId;
     }
 
-    /**
-     * @return version
-     */
-    public String getVersion() {
-        return version;
-    }
-
-    /**
-     * @param version
-     */
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
-    /**
-     * @return type
-     */
-    public String getType() {
-        return type;
-    }
-
-    /**
-     * @param type
-     */
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    /**
-     * @return amap_id
-     */
-    public String getAmapId() {
-        return amapId;
-    }
-
-    /**
-     * @param amapId
-     */
-    public void setAmapId(String amapId) {
-        this.amapId = amapId;
-    }
-
-    /**
-     * @return group_name
-     */
-    public String getGroupName() {
-        return groupName;
-    }
-
-    /**
-     * @param groupName
-     */
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
+        sb.append(", amapId=").append(amapId);
         sb.append(", mon=").append(mon);
         sb.append(", distId=").append(distId);
         sb.append(", distName=").append(distName);
         sb.append(", style=").append(style);
+        sb.append(", groupName=").append(groupName);
         sb.append(", provinceNameCn=").append(provinceNameCn);
         sb.append(", pharmId=").append(pharmId);
-        sb.append(", pharmNameCe=").append(pharmNameCe);
+        sb.append(", pharmNameCn=").append(pharmNameCn);
         sb.append(", hospitalId=").append(hospitalId);
         sb.append(", hospital=").append(hospital);
         sb.append(", salesDate=").append(salesDate);
@@ -344,10 +315,6 @@ public class Direction implements Serializable {
         sb.append(", productNameEn=").append(productNameEn);
         sb.append(", qty=").append(qty);
         sb.append(", productId=").append(productId);
-        sb.append(", version=").append(version);
-        sb.append(", type=").append(type);
-        sb.append(", amapId=").append(amapId);
-        sb.append(", groupName=").append(groupName);
         sb.append("]");
         return sb.toString();
     }

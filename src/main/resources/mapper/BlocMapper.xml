@@ -5,17 +5,18 @@
     <!--
       WARNING - @mbg.generated
     -->
-    <result column="id" jdbcType="NVARCHAR" property="id" />
+    <result column="id" jdbcType="INTEGER" property="id" />
     <result column="period" jdbcType="TIMESTAMP" property="period" />
-    <result column="hospital_id" jdbcType="NVARCHAR" property="hospitalId" />
-    <result column="segmentation" jdbcType="NVARCHAR" property="segmentation" />
+    <result column="hospital_id" jdbcType="VARCHAR" property="hospitalId" />
+    <result column="segmentation" jdbcType="VARCHAR" property="segmentation" />
     <result column="chain" jdbcType="NVARCHAR" property="chain" />
-    <result column="chain_en" jdbcType="NVARCHAR" property="chainEn" />
-    <result column="modifyon" jdbcType="TIMESTAMP" property="modifyon" />
-    <result column="modifyby" jdbcType="NVARCHAR" property="modifyby" />
-    <result column="createby" jdbcType="NVARCHAR" property="createby" />
-    <result column="createon" jdbcType="TIMESTAMP" property="createon" />
-    <result column="deleted" jdbcType="NVARCHAR" property="deleted" />
-    <result column="taid" jdbcType="NVARCHAR" property="taid" />
+    <result column="chain_en" jdbcType="VARCHAR" property="chainEn" />
+    <result column="MODIFYON" jdbcType="TIMESTAMP" property="modifyon" />
+    <result column="MODIFYBY" jdbcType="NVARCHAR" property="modifyby" />
+    <result column="CREATEBY" jdbcType="NVARCHAR" property="createby" />
+    <result column="CREATEON" jdbcType="TIMESTAMP" property="createon" />
+    <result column="DELETED" jdbcType="INTEGER" property="deleted" />
+    <result column="TAID" jdbcType="VARCHAR" property="taid" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
   </resultMap>
 </mapper>

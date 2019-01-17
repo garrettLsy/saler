@@ -65,7 +65,7 @@ public class BlocService {
 		calendar=Calendar.getInstance();
 		for(int i=0;i<list.size();i++) {
 			c=new AMAP_Data__c();
-			c.setPrimaryKey4Group__c(list.get(i).getId());
+			c.setPrimaryKey4Group__c(list.get(i).getId().toString());
 			//c.setPrimaryKey__c(list.get(i).getId());
 			if(null !=list.get(i).getPeriod()) {
 				calendar.setTime(list.get(i).getPeriod());

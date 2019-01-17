@@ -5,7 +5,7 @@ import java.util.Date;
 import javax.persistence.*;
 
 public class Bloc implements Serializable {
-    private String id;
+    private Integer id;
 
     private Date period;
 
@@ -19,31 +19,39 @@ public class Bloc implements Serializable {
     @Column(name = "chain_en")
     private String chainEn;
 
+    @Column(name = "MODIFYON")
     private Date modifyon;
 
+    @Column(name = "MODIFYBY")
     private String modifyby;
 
+    @Column(name = "CREATEBY")
     private String createby;
 
+    @Column(name = "CREATEON")
     private Date createon;
 
-    private String deleted;
+    @Column(name = "DELETED")
+    private Integer deleted;
 
+    @Column(name = "TAID")
     private String taid;
+
+    private String type;
 
     private static final long serialVersionUID = 1L;
 
     /**
      * @return id
      */
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
     /**
      * @param id
      */
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -118,7 +126,7 @@ public class Bloc implements Serializable {
     }
 
     /**
-     * @return modifyon
+     * @return MODIFYON
      */
     public Date getModifyon() {
         return modifyon;
@@ -132,7 +140,7 @@ public class Bloc implements Serializable {
     }
 
     /**
-     * @return modifyby
+     * @return MODIFYBY
      */
     public String getModifyby() {
         return modifyby;
@@ -146,7 +154,7 @@ public class Bloc implements Serializable {
     }
 
     /**
-     * @return createby
+     * @return CREATEBY
      */
     public String getCreateby() {
         return createby;
@@ -160,7 +168,7 @@ public class Bloc implements Serializable {
     }
 
     /**
-     * @return createon
+     * @return CREATEON
      */
     public Date getCreateon() {
         return createon;
@@ -174,21 +182,21 @@ public class Bloc implements Serializable {
     }
 
     /**
-     * @return deleted
+     * @return DELETED
      */
-    public String getDeleted() {
+    public Integer getDeleted() {
         return deleted;
     }
 
     /**
      * @param deleted
      */
-    public void setDeleted(String deleted) {
+    public void setDeleted(Integer deleted) {
         this.deleted = deleted;
     }
 
     /**
-     * @return taid
+     * @return TAID
      */
     public String getTaid() {
         return taid;
@@ -199,6 +207,20 @@ public class Bloc implements Serializable {
      */
     public void setTaid(String taid) {
         this.taid = taid;
+    }
+
+    /**
+     * @return type
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * @param type
+     */
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override
@@ -219,6 +241,7 @@ public class Bloc implements Serializable {
         sb.append(", createon=").append(createon);
         sb.append(", deleted=").append(deleted);
         sb.append(", taid=").append(taid);
+        sb.append(", type=").append(type);
         sb.append("]");
         return sb.toString();
     }

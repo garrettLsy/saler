@@ -5,51 +5,65 @@ import java.util.Date;
 import javax.persistence.*;
 
 public class Hospitals implements Serializable {
-    @Column(name = "hospital_id")
-    private String hospitalId;
+    @Column(name = "HOSPITALID")
+    private String hospitalid;
 
-    @Column(name = "name_cn")
-    private String nameCn;
+    @Column(name = "ACTUALUSEID")
+    private String actualuseid;
 
-    @Column(name = "name_en")
-    private String nameEn;
+    @Column(name = "Name")
+    private String name;
 
-    @Column(name = "complete_name")
-    private String completeName;
+    @Column(name = "NAMECN")
+    private String namecn;
 
+    @Column(name = "NAMEEN")
+    private String nameen;
+
+    @Column(name = "COMPLETENAME")
+    private String completename;
+
+    @Column(name = "TIER")
     private String tier;
 
     private String grade;
 
+    @Column(name = "TYPE")
     private String type;
 
+    @Column(name = "STYLE")
     private String style;
 
-    @Column(name = "city_id")
-    private String cityId;
+    @Column(name = "CITYID")
+    private String cityid;
 
+    @Column(name = "STATUS")
     private String status;
 
+    @Column(name = "POSTALCODE")
     private String postalcode;
 
-    private Integer noofbeds;
+    @Column(name = "NOOFBEDS")
+    private Double noofbeds;
 
+    @Column(name = "TELNO")
     private String telno;
 
+    @Column(name = "ADDRESS")
     private String address;
 
+    @Column(name = "COMMENTS")
     private String comments;
 
+    @Column(name = "DELETED")
     private Integer deleted;
 
-    @Column(name = "city_name")
-    private String cityName;
+    @Column(name = "CITYNAME")
+    private String cityname;
 
-    @Column(name = "province_id")
-    private String provinceId;
+    private String provinceid;
 
-    @Column(name = "province_name")
-    private String provinceName;
+    private String provincename;
 
     private Date modifyon;
 
@@ -62,63 +76,91 @@ public class Hospitals implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * @return hospital_id
+     * @return HOSPITALID
      */
-    public String getHospitalId() {
-        return hospitalId;
+    public String getHospitalid() {
+        return hospitalid;
     }
 
     /**
-     * @param hospitalId
+     * @param hospitalid
      */
-    public void setHospitalId(String hospitalId) {
-        this.hospitalId = hospitalId;
+    public void setHospitalid(String hospitalid) {
+        this.hospitalid = hospitalid;
     }
 
     /**
-     * @return name_cn
+     * @return ACTUALUSEID
      */
-    public String getNameCn() {
-        return nameCn;
+    public String getActualuseid() {
+        return actualuseid;
     }
 
     /**
-     * @param nameCn
+     * @param actualuseid
      */
-    public void setNameCn(String nameCn) {
-        this.nameCn = nameCn;
+    public void setActualuseid(String actualuseid) {
+        this.actualuseid = actualuseid;
     }
 
     /**
-     * @return name_en
+     * @return Name
      */
-    public String getNameEn() {
-        return nameEn;
+    public String getName() {
+        return name;
     }
 
     /**
-     * @param nameEn
+     * @param name
      */
-    public void setNameEn(String nameEn) {
-        this.nameEn = nameEn;
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
-     * @return complete_name
+     * @return NAMECN
      */
-    public String getCompleteName() {
-        return completeName;
+    public String getNamecn() {
+        return namecn;
     }
 
     /**
-     * @param completeName
+     * @param namecn
      */
-    public void setCompleteName(String completeName) {
-        this.completeName = completeName;
+    public void setNamecn(String namecn) {
+        this.namecn = namecn;
     }
 
     /**
-     * @return tier
+     * @return NAMEEN
+     */
+    public String getNameen() {
+        return nameen;
+    }
+
+    /**
+     * @param nameen
+     */
+    public void setNameen(String nameen) {
+        this.nameen = nameen;
+    }
+
+    /**
+     * @return COMPLETENAME
+     */
+    public String getCompletename() {
+        return completename;
+    }
+
+    /**
+     * @param completename
+     */
+    public void setCompletename(String completename) {
+        this.completename = completename;
+    }
+
+    /**
+     * @return TIER
      */
     public String getTier() {
         return tier;
@@ -146,7 +188,7 @@ public class Hospitals implements Serializable {
     }
 
     /**
-     * @return type
+     * @return TYPE
      */
     public String getType() {
         return type;
@@ -160,7 +202,7 @@ public class Hospitals implements Serializable {
     }
 
     /**
-     * @return style
+     * @return STYLE
      */
     public String getStyle() {
         return style;
@@ -174,21 +216,21 @@ public class Hospitals implements Serializable {
     }
 
     /**
-     * @return city_id
+     * @return CITYID
      */
-    public String getCityId() {
-        return cityId;
+    public String getCityid() {
+        return cityid;
     }
 
     /**
-     * @param cityId
+     * @param cityid
      */
-    public void setCityId(String cityId) {
-        this.cityId = cityId;
+    public void setCityid(String cityid) {
+        this.cityid = cityid;
     }
 
     /**
-     * @return status
+     * @return STATUS
      */
     public String getStatus() {
         return status;
@@ -202,7 +244,7 @@ public class Hospitals implements Serializable {
     }
 
     /**
-     * @return postalcode
+     * @return POSTALCODE
      */
     public String getPostalcode() {
         return postalcode;
@@ -216,21 +258,21 @@ public class Hospitals implements Serializable {
     }
 
     /**
-     * @return noofbeds
+     * @return NOOFBEDS
      */
-    public Integer getNoofbeds() {
+    public Double getNoofbeds() {
         return noofbeds;
     }
 
     /**
      * @param noofbeds
      */
-    public void setNoofbeds(Integer noofbeds) {
+    public void setNoofbeds(Double noofbeds) {
         this.noofbeds = noofbeds;
     }
 
     /**
-     * @return telno
+     * @return TELNO
      */
     public String getTelno() {
         return telno;
@@ -244,7 +286,7 @@ public class Hospitals implements Serializable {
     }
 
     /**
-     * @return address
+     * @return ADDRESS
      */
     public String getAddress() {
         return address;
@@ -258,7 +300,7 @@ public class Hospitals implements Serializable {
     }
 
     /**
-     * @return comments
+     * @return COMMENTS
      */
     public String getComments() {
         return comments;
@@ -272,7 +314,7 @@ public class Hospitals implements Serializable {
     }
 
     /**
-     * @return deleted
+     * @return DELETED
      */
     public Integer getDeleted() {
         return deleted;
@@ -286,45 +328,45 @@ public class Hospitals implements Serializable {
     }
 
     /**
-     * @return city_name
+     * @return CITYNAME
      */
-    public String getCityName() {
-        return cityName;
+    public String getCityname() {
+        return cityname;
     }
 
     /**
-     * @param cityName
+     * @param cityname
      */
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
+    public void setCityname(String cityname) {
+        this.cityname = cityname;
     }
 
     /**
-     * @return province_id
+     * @return provinceid
      */
-    public String getProvinceId() {
-        return provinceId;
+    public String getProvinceid() {
+        return provinceid;
     }
 
     /**
-     * @param provinceId
+     * @param provinceid
      */
-    public void setProvinceId(String provinceId) {
-        this.provinceId = provinceId;
+    public void setProvinceid(String provinceid) {
+        this.provinceid = provinceid;
     }
 
     /**
-     * @return province_name
+     * @return provincename
      */
-    public String getProvinceName() {
-        return provinceName;
+    public String getProvincename() {
+        return provincename;
     }
 
     /**
-     * @param provinceName
+     * @param provincename
      */
-    public void setProvinceName(String provinceName) {
-        this.provinceName = provinceName;
+    public void setProvincename(String provincename) {
+        this.provincename = provincename;
     }
 
     /**
@@ -389,15 +431,17 @@ public class Hospitals implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", hospitalId=").append(hospitalId);
-        sb.append(", nameCn=").append(nameCn);
-        sb.append(", nameEn=").append(nameEn);
-        sb.append(", completeName=").append(completeName);
+        sb.append(", hospitalid=").append(hospitalid);
+        sb.append(", actualuseid=").append(actualuseid);
+        sb.append(", name=").append(name);
+        sb.append(", namecn=").append(namecn);
+        sb.append(", nameen=").append(nameen);
+        sb.append(", completename=").append(completename);
         sb.append(", tier=").append(tier);
         sb.append(", grade=").append(grade);
         sb.append(", type=").append(type);
         sb.append(", style=").append(style);
-        sb.append(", cityId=").append(cityId);
+        sb.append(", cityid=").append(cityid);
         sb.append(", status=").append(status);
         sb.append(", postalcode=").append(postalcode);
         sb.append(", noofbeds=").append(noofbeds);
@@ -405,9 +449,9 @@ public class Hospitals implements Serializable {
         sb.append(", address=").append(address);
         sb.append(", comments=").append(comments);
         sb.append(", deleted=").append(deleted);
-        sb.append(", cityName=").append(cityName);
-        sb.append(", provinceId=").append(provinceId);
-        sb.append(", provinceName=").append(provinceName);
+        sb.append(", cityname=").append(cityname);
+        sb.append(", provinceid=").append(provinceid);
+        sb.append(", provincename=").append(provincename);
         sb.append(", modifyon=").append(modifyon);
         sb.append(", modifyby=").append(modifyby);
         sb.append(", createby=").append(createby);

@@ -5,11 +5,12 @@
     <!--
       WARNING - @mbg.generated
     -->
-    <result column="distributor_id" jdbcType="NVARCHAR" property="distributorId" />
-    <result column="name_ce" jdbcType="NVARCHAR" property="nameCe" />
-    <result column="name_en" jdbcType="NVARCHAR" property="nameEn" />
+    <result column="distributorid" jdbcType="NVARCHAR" property="distributorid" />
+    <result column="Name" jdbcType="NVARCHAR" property="name" />
+    <result column="namecn" jdbcType="NVARCHAR" property="namecn" />
+    <result column="nameen" jdbcType="NVARCHAR" property="nameen" />
     <result column="city_id" jdbcType="NVARCHAR" property="cityId" />
-    <result column="province_id" jdbcType="NVARCHAR" property="provinceId" />
+    <result column="provinceid" jdbcType="NVARCHAR" property="provinceid" />
     <result column="comments" jdbcType="NVARCHAR" property="comments" />
     <result column="deleted" jdbcType="INTEGER" property="deleted" />
     <result column="city_name" jdbcType="NVARCHAR" property="cityName" />

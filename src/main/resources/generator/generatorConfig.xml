@@ -60,8 +60,8 @@
 		<table tableName="tag"></table> -->
 		<!-- 	<table tableName="direction"></table>
 			<table tableName="distributors"></table> -->
-	<!-- <table tableName="distributors"></table>  -->
-	 		<table tableName="bloc"></table> 
-	 		<!-- <table tableName="direction"></table>   -->
+	<!-- <table tableName="bloc"></table>  -->
+	 		<table tableName="direction"></table> 
+	 		<!-- <table tableName="distributors"></table>   -->
 	</context>
 </generatorConfiguration>

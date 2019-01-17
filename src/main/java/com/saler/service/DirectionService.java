@@ -69,7 +69,12 @@ public class DirectionService extends LoggerUtil{
 			c.setSales_Month__c(list.get(i).getMon());
 			calendar.setTime(list.get(i).getSalesDate());
 			c.setSales_Date__c(calendar);
-			c.setQuantity__c((double)list.get(i).getQty());
+			if(null!=list.get(i).getQty()&&list.get(i).getQty()!=0) {
+				c.setQuantity__c((double)list.get(i).getQty());
+			}else {
+				c.setQuantity__c(0.0);
+			}
+			
 			if(null!=list.get(i).getProvinceNameCn()&&!list.get(i).getProvinceNameCn().equals("NULL")) {
 				c.setProvinceName__c(list.get(i).getProvinceNameCn());
 			}else {
@@ -87,8 +92,8 @@ public class DirectionService extends LoggerUtil{
 				c.setProduct_Name__c("");
 			}
 			c.setProduct_Code__c(list.get(i).getProductId());
-			if(null!=list.get(i).getPharmNameCe()&&!list.get(i).getPharmNameCe().equals("NULL")) {
-				c.setPharm_Name__c(list.get(i).getPharmNameCe());
+			if(null!=list.get(i).getPharmNameCn()&&!list.get(i).getPharmNameCn().equals("NULL")) {
+				c.setPharm_Name__c(list.get(i).getPharmNameCn());
 			}else {
 				c.setPharm_Name__c("");
 			}

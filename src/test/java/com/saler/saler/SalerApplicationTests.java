@@ -19,6 +19,7 @@ public class SalerApplicationTests {
 	DirectionService dn;
 	@Autowired
 	BlocService gs;*/
+
 	@Test
 	public void contextLoads() {
 		/*SFCELoginService login=new SFCELoginService();
@@ -35,5 +36,6 @@ public class SalerApplicationTests {
 	}
 
 */
+	
 }
 

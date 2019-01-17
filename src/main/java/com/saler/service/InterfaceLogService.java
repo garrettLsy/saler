@@ -40,7 +40,7 @@ public class InterfaceLogService {
 		c.setError_Message__c(JSON.toJSONString(errorMsgList));
 		if(objectName.equals("Pharm")) {
 			Example example=new Example(Hospitals.class);
-			example.createCriteria().andIn("hospitalId", idList);
+			example.createCriteria().andIn("hospitalid", idList);
 			List<Hospitals> list=hospitalsService.selectByExample(example);
 			c.setObject_Name__c(objectName);
 			c.setRecordDetail__c(JSON.toJSONString(list));
@@ -48,7 +48,7 @@ public class InterfaceLogService {
 		}
 		else if(objectName.equals("Distributor")){
 			Example example=new Example(Distributors.class);
-			example.createCriteria().andIn("distributorId", idList);
+			example.createCriteria().andIn("distributorid", idList);
 			List<Distributors> list=distributorsService.selectByExample(example);
 			c.setObject_Name__c(objectName);
 			c.setRecordDetail__c(JSON.toJSONString(list));

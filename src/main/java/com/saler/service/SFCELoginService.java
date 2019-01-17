@@ -28,7 +28,7 @@ public class SFCELoginService {
 
 	//SFCE登录
 	public void SFCDnewConnection() {
-	/*	PropertiesConfig pc=new PropertiesConfig("./application.properties");
+		/*PropertiesConfig pc=new PropertiesConfig("./application.properties");
 	
 		String userName=(String)pc.getProperties().getProperty("salesforce.userName");
 		String userPassWord=pc.getProperties().getProperty("salesforce.password");*/

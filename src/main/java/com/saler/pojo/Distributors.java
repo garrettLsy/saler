@@ -5,20 +5,19 @@ import java.util.Date;
 import javax.persistence.*;
 
 public class Distributors implements Serializable {
-    @Column(name = "distributor_id")
-    private String distributorId;
+    private String distributorid;
 
-    @Column(name = "name_ce")
-    private String nameCe;
+    @Column(name = "Name")
+    private String name;
 
-    @Column(name = "name_en")
-    private String nameEn;
+    private String namecn;
+
+    private String nameen;
 
     @Column(name = "city_id")
     private String cityId;
 
-    @Column(name = "province_id")
-    private String provinceId;
+    private String provinceid;
 
     private String comments;
 
@@ -41,45 +40,59 @@ public class Distributors implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * @return distributor_id
+     * @return distributorid
      */
-    public String getDistributorId() {
-        return distributorId;
+    public String getDistributorid() {
+        return distributorid;
     }
 
     /**
-     * @param distributorId
+     * @param distributorid
      */
-    public void setDistributorId(String distributorId) {
-        this.distributorId = distributorId;
+    public void setDistributorid(String distributorid) {
+        this.distributorid = distributorid;
     }
 
     /**
-     * @return name_ce
+     * @return Name
      */
-    public String getNameCe() {
-        return nameCe;
+    public String getName() {
+        return name;
     }
 
     /**
-     * @param nameCe
+     * @param name
      */
-    public void setNameCe(String nameCe) {
-        this.nameCe = nameCe;
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
-     * @return name_en
+     * @return namecn
      */
-    public String getNameEn() {
-        return nameEn;
+    public String getNamecn() {
+        return namecn;
     }
 
     /**
-     * @param nameEn
+     * @param namecn
      */
-    public void setNameEn(String nameEn) {
-        this.nameEn = nameEn;
+    public void setNamecn(String namecn) {
+        this.namecn = namecn;
+    }
+
+    /**
+     * @return nameen
+     */
+    public String getNameen() {
+        return nameen;
+    }
+
+    /**
+     * @param nameen
+     */
+    public void setNameen(String nameen) {
+        this.nameen = nameen;
     }
 
     /**
@@ -97,17 +110,17 @@ public class Distributors implements Serializable {
     }
 
     /**
-     * @return province_id
+     * @return provinceid
      */
-    public String getProvinceId() {
-        return provinceId;
+    public String getProvinceid() {
+        return provinceid;
     }
 
     /**
-     * @param provinceId
+     * @param provinceid
      */
-    public void setProvinceId(String provinceId) {
-        this.provinceId = provinceId;
+    public void setProvinceid(String provinceid) {
+        this.provinceid = provinceid;
     }
 
     /**
@@ -228,11 +241,12 @@ public class Distributors implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", distributorId=").append(distributorId);
-        sb.append(", nameCe=").append(nameCe);
-        sb.append(", nameEn=").append(nameEn);
+        sb.append(", distributorid=").append(distributorid);
+        sb.append(", name=").append(name);
+        sb.append(", namecn=").append(namecn);
+        sb.append(", nameen=").append(nameen);
         sb.append(", cityId=").append(cityId);
-        sb.append(", provinceId=").append(provinceId);
+        sb.append(", provinceid=").append(provinceid);
         sb.append(", comments=").append(comments);
         sb.append(", deleted=").append(deleted);
         sb.append(", cityName=").append(cityName);

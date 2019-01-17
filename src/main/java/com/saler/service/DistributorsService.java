@@ -58,14 +58,14 @@ public class DistributorsService {
 		Calendar calendar=null;
 		for(int i=0;i<list.size();i++) {
 			c=new Distributor__c();
-			c.setProvinceID__c(list.get(i).getProvinceId());
+			c.setProvinceID__c(list.get(i).getProvinceid());
 			if(null!=list.get(i).getProvinceName()&&!list.get(i).getProvinceName().equals("NULL")) {
 				c.setProvince__c(list.get(i).getProvinceName().trim());
 			}else {
 				c.setProvince__c("");
 			}
-			if(null!=list.get(i).getNameEn()&&!list.get(i).getNameEn().equals("NULL")) {
-				c.setNameEN__c(list.get(i).getNameEn().trim());
+			if(null!=list.get(i).getNameen()&&!list.get(i).getNameen().equals("NULL")) {
+				c.setNameEN__c(list.get(i).getNameen().trim());
 			}else {
 				c.setNameEN__c("");
 			}
@@ -82,12 +82,12 @@ public class DistributorsService {
 			}else {
 				c.setIs_Deleted__c(false);
 			}
-			if(null!=list.get(i).getNameCe()&&!list.get(i).getNameCe().equals("NULL")) {
-				c.setDistributor_Name_CN__c(list.get(i).getNameCe().trim());
+			if(null!=list.get(i).getNamecn()&&!list.get(i).getNamecn().equals("NULL")) {
+				c.setDistributor_Name_CN__c(list.get(i).getNamecn().trim());
 			}else {
 				c.setDistributor_Name_CN__c("");
 			}
-			c.setDistributor_Code__c(list.get(i).getDistributorId());
+			c.setDistributor_Code__c(list.get(i).getDistributorid());
 			calendar=Calendar.getInstance();
 			if(null==list.get(i).getCreateon()) {
 				c.setCreateOn__c(null);
@@ -112,8 +112,8 @@ public class DistributorsService {
 			}else {
 				c.setCity__c("");
 			}
-			if(null!=list.get(i).getNameCe()&&!list.get(i).getNameCe().equals("NULL")) {
-				c.setName(list.get(i).getNameCe());
+			if(null!=list.get(i).getNamecn()&&!list.get(i).getNamecn().equals("NULL")) {
+				c.setName(list.get(i).getNamecn());
 			}else {
 				c.setName("");
 			}

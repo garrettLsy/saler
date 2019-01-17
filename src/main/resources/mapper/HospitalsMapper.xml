@@ -5,25 +5,27 @@
     <!--
       WARNING - @mbg.generated
     -->
-    <result column="hospital_id" jdbcType="NVARCHAR" property="hospitalId" />
-    <result column="name_cn" jdbcType="NVARCHAR" property="nameCn" />
-    <result column="name_en" jdbcType="NVARCHAR" property="nameEn" />
-    <result column="complete_name" jdbcType="NVARCHAR" property="completeName" />
-    <result column="tier" jdbcType="NVARCHAR" property="tier" />
+    <result column="HOSPITALID" jdbcType="NVARCHAR" property="hospitalid" />
+    <result column="ACTUALUSEID" jdbcType="NVARCHAR" property="actualuseid" />
+    <result column="Name" jdbcType="NVARCHAR" property="name" />
+    <result column="NAMECN" jdbcType="NVARCHAR" property="namecn" />
+    <result column="NAMEEN" jdbcType="NVARCHAR" property="nameen" />
+    <result column="COMPLETENAME" jdbcType="NVARCHAR" property="completename" />
+    <result column="TIER" jdbcType="NVARCHAR" property="tier" />
     <result column="grade" jdbcType="NVARCHAR" property="grade" />
-    <result column="type" jdbcType="NVARCHAR" property="type" />
-    <result column="style" jdbcType="NVARCHAR" property="style" />
-    <result column="city_id" jdbcType="NVARCHAR" property="cityId" />
-    <result column="status" jdbcType="NVARCHAR" property="status" />
-    <result column="postalcode" jdbcType="NVARCHAR" property="postalcode" />
-    <result column="noofbeds" jdbcType="INTEGER" property="noofbeds" />
-    <result column="telno" jdbcType="NVARCHAR" property="telno" />
-    <result column="address" jdbcType="NVARCHAR" property="address" />
-    <result column="comments" jdbcType="NVARCHAR" property="comments" />
-    <result column="deleted" jdbcType="INTEGER" property="deleted" />
-    <result column="city_name" jdbcType="NVARCHAR" property="cityName" />
-    <result column="province_id" jdbcType="NVARCHAR" property="provinceId" />
-    <result column="province_name" jdbcType="NVARCHAR" property="provinceName" />
+    <result column="TYPE" jdbcType="NVARCHAR" property="type" />
+    <result column="STYLE" jdbcType="NVARCHAR" property="style" />
+    <result column="CITYID" jdbcType="NVARCHAR" property="cityid" />
+    <result column="STATUS" jdbcType="NVARCHAR" property="status" />
+    <result column="POSTALCODE" jdbcType="NVARCHAR" property="postalcode" />
+    <result column="NOOFBEDS" jdbcType="DOUBLE" property="noofbeds" />
+    <result column="TELNO" jdbcType="NVARCHAR" property="telno" />
+    <result column="ADDRESS" jdbcType="NVARCHAR" property="address" />
+    <result column="COMMENTS" jdbcType="NVARCHAR" property="comments" />
+    <result column="DELETED" jdbcType="INTEGER" property="deleted" />
+    <result column="CITYNAME" jdbcType="NVARCHAR" property="cityname" />
+    <result column="provinceid" jdbcType="NVARCHAR" property="provinceid" />
+    <result column="provincename" jdbcType="NVARCHAR" property="provincename" />
     <result column="modifyon" jdbcType="TIMESTAMP" property="modifyon" />
     <result column="modifyby" jdbcType="NVARCHAR" property="modifyby" />
     <result column="createby" jdbcType="NVARCHAR" property="createby" />

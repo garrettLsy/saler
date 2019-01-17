@@ -52,7 +52,7 @@ public class HospitalsService {
 		if(null!=beginTime&&null!=endTime) {
 			example.createCriteria().andGreaterThanOrEqualTo("modifyon",beginTime).andLessThanOrEqualTo("modifyon", endTime);
 		}
-		List<Hospitals> list=hm.selectByExample(example);
+		List<Hospitals> list=hm.selectByExample(example).subList(0, 100);
 
 		/*try {
 			async.addMysqlHospitals(restTemplate, list);
@@ -81,9 +81,9 @@ public class HospitalsService {
 				}
 				c.setStyle__c(list.get(i).getStyle());
 				c.setStatus__c(list.get(i).getStatus());
-				c.setProvinceID__c(list.get(i).getProvinceId());
-				if(null!=list.get(i).getProvinceName()&&!list.get(i).getProvinceName().equals("NULL")) {
-					c.setProvince__c(list.get(i).getProvinceName().trim());
+				c.setProvinceID__c(list.get(i).getProvinceid());
+				if(null!=list.get(i).getProvincename()&&!list.get(i).getProvincename().equals("NULL")) {
+					c.setProvince__c(list.get(i).getProvincename().trim());
 				}else {
 					c.setProvince__c("");
 				}
@@ -92,19 +92,19 @@ public class HospitalsService {
 				}else {
 					c.setPostCode__c(list.get(i).getPostalcode());
 				}
-				if(null!=list.get(i).getNameEn()&&!list.get(i).getNameEn().equals("NULL")) {
-					c.setPharmNameEN__c(list.get(i).getNameEn().trim());
+				if(null!=list.get(i).getNameen()&&!list.get(i).getNameen().equals("NULL")) {
+					c.setPharmNameEN__c(list.get(i).getNameen().trim());
 				}else {
 					c.setPharmNameEN__c("");
 				}
-				if(null !=list.get(i).getNameCn()&&!list.get(i).getNameCn().equals("NULL")) {
-					c.setPharm_Name_CN__c(list.get(i).getNameCn().trim());
+				if(null !=list.get(i).getNamecn()&&!list.get(i).getNamecn().equals("NULL")) {
+					c.setPharm_Name_CN__c(list.get(i).getNamecn().trim());
 				}else {
 					c.setPharm_Name_CN__c("");
 
 				}
-				if(null!=list.get(i).getHospitalId()&&!list.get(i).getHospitalId().equals("NULL")) {
-					c.setPharm_Code__c(list.get(i).getHospitalId().trim());			
+				if(null!=list.get(i).getHospitalid()&&!list.get(i).getHospitalid().equals("NULL")) {
+					c.setPharm_Code__c(list.get(i).getHospitalid().trim());			
 				}else {
 					c.setPharm_Code__c("");
 				}
@@ -143,8 +143,8 @@ public class HospitalsService {
 					c.setCreateOn__c(calendar);
 				}
 				c.setCreateBy__c(list.get(i).getCreateby());
-				if(null!=list.get(i).getCompleteName()&&!list.get(i).getCompleteName().equals("NULL")) {
-					c.setComplete_Pharm_Name_CN__c(list.get(i).getCompleteName().trim());
+				if(null!=list.get(i).getCompletename()&&!list.get(i).getCompletename().equals("NULL")) {
+					c.setComplete_Pharm_Name_CN__c(list.get(i).getCompletename().trim());
 				}else {
 					c.setComplete_Pharm_Name_CN__c("");
 				}
@@ -154,13 +154,13 @@ public class HospitalsService {
 				}else {
 					c.setComments__c("");
 				}
-				if(null!=list.get(i).getCityId()&&!list.get(i).getCityId().equals("NULL")) {
-					c.setCityID__c(list.get(i).getCityId());
+				if(null!=list.get(i).getCityid()&&!list.get(i).getCityid().equals("NULL")) {
+					c.setCityID__c(list.get(i).getCityid());
 				}else {
 					c.setCityID__c("");
 				}
-				if(null!=list.get(i).getCityName()&&!list.get(i).getCityName().equals("NULL")) {
-					c.setCity_Name__c(list.get(i).getCityName().trim());
+				if(null!=list.get(i).getCityname()&&!list.get(i).getCityname().equals("NULL")) {
+					c.setCity_Name__c(list.get(i).getCityname().trim());
 				}else {
 					c.setCity_Name__c("");
 				}
@@ -169,15 +169,15 @@ public class HospitalsService {
 				}else {
 					c.setAddress__c("");
 				}
-				if(null!=list.get(i).getNameCn()&&!list.get(i).getNameCn().equals("NULL")) {
-					c.setName(list.get(i).getNameCn().trim());
+				if(null!=list.get(i).getNamecn()&&!list.get(i).getNamecn().equals("NULL")) {
+					c.setName(list.get(i).getNamecn().trim());
 
 				}else {
 					c.setName("");
 				}
 			}catch(Exception e) {
 				Map<String,Object> maps=new HashMap<>();
-				maps.put(list.get(i).getHospitalId(), "数据异常");
+				maps.put(list.get(i).getHospitalid(), "数据异常");
 				errorKeyValue.add(maps);
 				continue;
 			}
@@ -219,7 +219,7 @@ public class HospitalsService {
 							com.sforce.soap.enterprise.Error[] errors = results[v].getErrors();
 							for (int j=0; j< errors.length; j++) {
 								logger.warn("第"+v+"条"+"ERROR creating record: " + errors[j].getMessage());
-								errorPharm_cList_ID.add(list.get(i).getHospitalId());
+								errorPharm_cList_ID.add(list.get(i).getHospitalid());
 								errorPharm_cMessage.add(errors[j].getMessage());
 								errorCount++;
 							}
