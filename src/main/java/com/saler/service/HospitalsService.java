@@ -197,7 +197,6 @@ public class HospitalsService {
 		//用于记录数据
 		List<Pharm__c> cs2=new ArrayList<>();
 		//-----------------------------
-		List<Pharm__c> errorPharm__cList=new ArrayList<>();//收集错误对象
 		List<String> errorPharm_cList_ID=new ArrayList<>(); //错误数据id
 		List<String> errorPharm_cMessage=new ArrayList<>();//错误数据内容
 		//List<Hospitals> HospitalsList=new ArrayList<>();

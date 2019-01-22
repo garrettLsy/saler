@@ -15,6 +15,7 @@ import com.saler.service.BlocService;
 import com.saler.service.DirectionService;
 import com.saler.service.DistributorsService;
 import com.saler.service.HospitalsService;
+import com.saler.service.TargetService;
 
 @RestController
 @RequestMapping("/sale")
@@ -31,6 +32,8 @@ public class DistributorsController {
 	private BlocService blocService;
 	@Autowired
 	private HospitalsService hospitalsService;
+	@Autowired
+	private TargetService targetService;
 	@RequestMapping(value="/add",method=RequestMethod.GET)
 	public Map<String,Object> getMaps(@RequestParam String beginTime,@RequestParam String endTime,
 			@RequestParam String objectType){
@@ -43,6 +46,8 @@ public class DistributorsController {
 			return directionService.add(beginTime, endTime);
 		}else if(objectType.equals("Group")) {
 			return	blocService.add(beginTime, endTime);
+		}else if(objectType.equals("Target")) {
+			return targetService.save(beginTime, endTime);
 		}
 		return map;
 	} 

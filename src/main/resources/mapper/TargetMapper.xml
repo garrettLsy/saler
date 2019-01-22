@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.saler.mapper.TargetMapper">
+  <resultMap id="BaseResultMap" type="com.saler.pojo.Target">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="period" jdbcType="TIMESTAMP" property="period" />
+    <result column="hospitalid" jdbcType="NVARCHAR" property="hospitalid" />
+    <result column="productid" jdbcType="NVARCHAR" property="productid" />
+    <result column="targetunit" jdbcType="DOUBLE" property="targetunit" />
+    <result column="modifyon" jdbcType="TIMESTAMP" property="modifyon" />
+    <result column="modifyby" jdbcType="NVARCHAR" property="modifyby" />
+    <result column="createby" jdbcType="NVARCHAR" property="createby" />
+    <result column="createon" jdbcType="TIMESTAMP" property="createon" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
+  </resultMap>
+</mapper>
