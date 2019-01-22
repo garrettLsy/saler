@@ -1,5 +1,7 @@
 package com.saler.config;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,15 +34,11 @@ public class ScheduledTask {
 	@Scheduled(cron="0 7 10 15 * ?")//每月8日上午10:15触发   cron表达式详解
 	//@Scheduled(fixedRate=10800000)
 	public void test() {
-		hospitalsService.add(null,null);
-		directionService.add(null,null);
-		distributorsService.add(null,null);
-		blocService.add(null, null);
-		
-		
-
-
-
-
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy");
+		SimpleDateFormat sdf2=new SimpleDateFormat("yyyy-MM-dd");
+		hospitalsService.add(sdf.format(new Date())+"-01-01",sdf2.format(new Date()));
+		directionService.add(sdf.format(new Date())+"-01-01",sdf2.format(new Date()));
+		distributorsService.add(sdf.format(new Date())+"-01-01",sdf2.format(new Date()));
+		blocService.add(sdf.format(new Date())+"-01-01",sdf2.format(new Date()));
 	}
 }
