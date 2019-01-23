@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.saler.async.HospitalsAsync;
 import com.saler.mapper.TargetMapper;
 import com.saler.pojo.Target;
 import com.sforce.soap.enterprise.EnterpriseConnection;
@@ -25,6 +26,8 @@ public class TargetService {
 	Logger logger=LoggerFactory.getLogger(getClass());
 	@Autowired
 	private TargetMapper tm;
+	@Autowired
+	private HospitalsAsync async;
 
 	@Autowired
 	InterfaceLogService interfaceLogService;
@@ -42,6 +45,12 @@ public class TargetService {
 			example.createCriteria().andGreaterThanOrEqualTo("createon", beginTime).andLessThanOrEqualTo("createon", endTime);
 		}
 		List<Target> list=tm.selectByExample(example);
+		
+	/*	try {
+			async.addMysqlTarget(list);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}*/
 		logger.debug("从数据库拉去到\t"+list.size()+"\t条");
 		List<SARA_Target_Hospital__c> listArray=new ArrayList<>();
 		SARA_Target_Hospital__c c=null;
