@@ -37,11 +37,11 @@ public class HospitalsAsync {
 	}
 	@Async
 	@Transactional(propagation=Propagation.REQUIRED)
-	public void addMysqlDirction(RestTemplate restTemplate,List<Direction> list,String version) {
+	public void addMysqlDirction(List<Direction> list,String version) {
 		Map<String,Object> map=new HashMap<>();
 		map.put("list",JSON.toJSONString(list));
 		map.put("version", version);
-		restTemplate.postForObject(LoggerUtil.HERO_HTTP+"/sale/adddirection", map, Boolean.class);
+		restTemplates.postForObject(LoggerUtil.HERO_HTTP+"/sale/adddirection", map, Boolean.class);
 	}
 	@Async
 	@Transactional(propagation=Propagation.REQUIRED)

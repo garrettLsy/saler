@@ -1,5 +1,6 @@
 package com.saler.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -42,28 +43,41 @@ public class TargetService {
 		EnterpriseConnection connection=loginService.getconnection();
 		Example example=new Example(Target.class);
 		if(null!=beginTime&&null!=endTime) {
-			example.createCriteria().andGreaterThanOrEqualTo("createon", beginTime).andLessThanOrEqualTo("createon", endTime);
+			example.createCriteria().andGreaterThanOrEqualTo("createon", beginTime)
+			.andLessThanOrEqualTo("createon", endTime).orGreaterThanOrEqualTo("modifyon", beginTime)
+			.andLessThanOrEqualTo("modifyon", endTime);
 		}
-		List<Target> list=tm.selectByExample(example);
+		List<Target> list=tm.selectByExample(example).subList(0, 5);
+		for(Target tt: list) {
+			System.out.println( tt.getId()+"\t"+tt.getPeriod());
+		}
 		
-	/*	try {
+		try {
 			async.addMysqlTarget(list);
 		}catch(Exception e) {
 			e.printStackTrace();
-		}*/
+		}
 		logger.debug("从数据库拉去到\t"+list.size()+"\t条");
 		List<SARA_Target_Hospital__c> listArray=new ArrayList<>();
 		SARA_Target_Hospital__c c=null;
-		Calendar calendar=Calendar.getInstance();
-
+		Calendar calendar=null;
 		for(int i=0,p=list.size();i<p;i++) {
+			
+
+
 			try {
 				c=new SARA_Target_Hospital__c();
 				c.setExternal_Key__c(list.get(i).getId().toString());
+				calendar=Calendar.getInstance();
 				calendar.setTime(list.get(i).getPeriod());
+				calendar.add(Calendar.HOUR_OF_DAY, 8);
+
 				c.setPeriod__c(calendar);
+
 				c.setPharm_Code__c(list.get(i).getHospitalid());
+				
 				c.setProduct_Code__c(list.get(i).getProductid());
+				
 				c.setTarget_Unit__c(list.get(i).getTargetunit());
 				if(null!=list.get(i).getModifyby()&&!list.get(i).getModifyby().equals("NULL")) {
 					c.setModifyBy__c(list.get(i).getModifyby());
@@ -78,6 +92,7 @@ public class TargetService {
 					c.setModifyOn__c(null);
 				}
 				c.setCreateBy__c(list.get(i).getCreateby());
+				calendar=Calendar.getInstance();
 				calendar.setTime(list.get(i).getCreateon());
 				c.setCreateOn__c(calendar);
 				if(list.get(i).getDeleted()==0) {
@@ -135,6 +150,8 @@ public class TargetService {
 					for (int v=0; v< results.length; v++) {
 						if (results[v].isSuccess()) {
 							logger.debug(v+". Successfully created record - Id: " + results[v].getId());
+							SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+							System.out.println(sdf.format(sthArray[v].getPeriod__c().getTime()));
 							successCount++;					
 						} else {
 							com.sforce.soap.enterprise.Error[] errors = results[v].getErrors();

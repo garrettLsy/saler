@@ -44,7 +44,9 @@ public class DistributorsService {
 		EnterpriseConnection connection=login.getconnection();
 		Example example=new Example(Distributors.class);
 		if(null!=beginTime&&null!=endTime) {
-			example.createCriteria().andGreaterThanOrEqualTo("modifyon",beginTime).andLessThanOrEqualTo("modifyon", endTime);
+			example.createCriteria().andGreaterThanOrEqualTo("modifyon",beginTime)
+			.andLessThanOrEqualTo("modifyon", endTime).orGreaterThanOrEqualTo("createon", beginTime)
+			.andLessThanOrEqualTo("createon", endTime);
 		}
 		List<Distributors> list=distributorsMapper.selectByExample(example);
 		/*try {
@@ -69,10 +71,11 @@ public class DistributorsService {
 			}else {
 				c.setNameEN__c("");
 			}
-			calendar=Calendar.getInstance();
+		
 			if(null==list.get(i).getModifyon()) {
 				c.setModifyOn__c(null);
 			}else {
+				calendar=Calendar.getInstance();
 				calendar.setTime(list.get(i).getModifyon());
 				c.setModifyOn__c(calendar);
 			}
@@ -88,10 +91,11 @@ public class DistributorsService {
 				c.setDistributor_Name_CN__c("");
 			}
 			c.setDistributor_Code__c(list.get(i).getDistributorid());
-			calendar=Calendar.getInstance();
+		
 			if(null==list.get(i).getCreateon()) {
 				c.setCreateOn__c(null);
 			}else {
+				calendar=Calendar.getInstance();
 				calendar.setTime(list.get(i).getCreateon());
 				c.setCreateOn__c(calendar);
 			}

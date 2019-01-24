@@ -50,7 +50,9 @@ public class HospitalsService {
 		EnterpriseConnection connection=login.getconnection();
 		Example example=new Example(Hospitals.class);
 		if(null!=beginTime&&null!=endTime) {
-			example.createCriteria().andGreaterThanOrEqualTo("modifyon",beginTime).andLessThanOrEqualTo("modifyon", endTime);
+			example.createCriteria().andGreaterThanOrEqualTo("modifyon",beginTime)
+			.andLessThanOrEqualTo("modifyon", endTime).orGreaterThanOrEqualTo("createon", beginTime)
+			.andLessThanOrEqualTo("createon", endTime);
 		}
 		List<Hospitals> list=hm.selectByExample(example).subList(0, 100);
 
@@ -114,11 +116,12 @@ public class HospitalsService {
 					c.setNumberOfBeds__c((double)list.get(i).getNoofbeds());
 				}
 				//时间转日历
-				calendar=Calendar.getInstance();
+				
 				if(null==list.get(i).getModifyon()) {
 					c.setModifyOn__c(null);
 
 				}else {
+					calendar=Calendar.getInstance();
 					calendar.setTime(list.get(i).getModifyon());
 					c.setModifyOn__c(calendar);
 				}
@@ -135,10 +138,11 @@ public class HospitalsService {
 				c.setGrade__c(list.get(i).getGrade());
 				//c.setDistributor__c(list.get(i).get);
 				//时间转日历
-				calendar=Calendar.getInstance();
+			
 				if(null==list.get(i).getCreateon()) {
 					c.setCreateOn__c(null);
 				}else {
+					calendar=Calendar.getInstance();
 					calendar.setTime(list.get(i).getCreateon());
 					c.setCreateOn__c(calendar);
 				}

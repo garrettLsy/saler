@@ -50,7 +50,9 @@ public class BlocService {
 		//查询本地数据库
 		Example example=new Example(Bloc.class);
 		if(null!=beginTime&&null!=endTime) {
-			example.createCriteria().andGreaterThanOrEqualTo("modifyon",beginTime).andLessThanOrEqualTo("modifyon",endTime);
+			example.createCriteria().andGreaterThanOrEqualTo("modifyon",beginTime)
+			.andLessThanOrEqualTo("modifyon",endTime).orGreaterThanOrEqualTo("createon", beginTime)
+			.andLessThanOrEqualTo("createon", endTime);
 		}
 		List<Bloc> list=bm.selectByExample(example);
 		/*try {
@@ -62,15 +64,15 @@ public class BlocService {
 		List<AMAP_Data__c> clist=new ArrayList<>();
 		AMAP_Data__c c=null;
 		Calendar calendar=null;
-		calendar=Calendar.getInstance();
+		
 		for(int i=0;i<list.size();i++) {
 			c=new AMAP_Data__c();
 			c.setPrimaryKey4Group__c(list.get(i).getId().toString());
 			//c.setPrimaryKey__c(list.get(i).getId());
 			if(null !=list.get(i).getPeriod()) {
+				calendar=Calendar.getInstance();
 				calendar.setTime(list.get(i).getPeriod());
 				c.setPeriod__c(calendar);
-				calendar.clear();
 			}else {
 				c.setPeriod__c(null);
 			}
@@ -83,7 +85,6 @@ public class BlocService {
 			}
 			if(null!=list.get(i).getChain()&&!list.get(i).getChain().equals("NULL")) {
 				c.setGroup_Name__c(list.get(i).getChain());
-
 			}else {
 				c.setGroup_Name__c("");
 			}
@@ -93,6 +94,7 @@ public class BlocService {
 				c.setGroup_Name_EN__c("");
 			}
 			if(null!=list.get(i).getModifyon()) {
+				calendar=Calendar.getInstance();
 				calendar.setTime(list.get(i).getModifyon());
 				c.setModifyOn__c(calendar);
 			}else {
@@ -111,12 +113,13 @@ public class BlocService {
 				c.setCreateBy__c("");
 			}
 			if(null!=list.get(i).getModifyon()) {
+				calendar=Calendar.getInstance();
 				calendar.setTime(list.get(i).getModifyon());
 				c.setCreateOn__c(calendar);
 			}else {
 				c.setCreateOn__c(null);
 			}
-			if(null!=list.get(i).getDeleted()&&list.get(i).getDeleted().equals("2")) {
+			if(null!=list.get(i).getDeleted()&&list.get(i).getDeleted().equals("1")) {
 				c.setIsDeleted__c(true);
 			}else {
 				c.setIsDeleted__c(false);

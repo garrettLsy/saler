@@ -48,25 +48,28 @@ public class DirectionService extends LoggerUtil{
 		if(null!=beginTime&&null!=endTime) {
 			example.createCriteria().andGreaterThanOrEqualTo("salesDate",beginTime).andLessThanOrEqualTo("salesDate",endTime);
 		}
-		List<Direction> list=dm.selectByExample(example);
-
-		/*try {
-			async.addMysqlDirction(restTemplate, list, timeVersion);
+		List<Direction> list=dm.selectByExample(example).subList(0, 5);
+		for(Direction d:list) {
+			System.out.println(d.getAmapId()+"\t"+d.getSalesDate());
+		}
+		try {
+			async.addMysqlDirction( list, timeVersion);
 		} catch (Exception e) {
 			System.out.println("木有灵魂的代码");	
 			e.printStackTrace();
-		}*/
+		}
 
 		List<AMAP_Data__c> clist=new ArrayList<>();
 		AMAP_Data__c c=null;
 		Calendar calendar=null;
-		calendar=Calendar.getInstance();
 		for(int i=0;i<list.size();i++) {
 			c=new AMAP_Data__c();
 			c.setVersion__c(timeVersion);
 			c.setType__c("Sales Data");
 			c.setStyle__c(list.get(i).getStyle());
 			c.setSales_Month__c(list.get(i).getMon());
+
+			calendar=Calendar.getInstance();
 			calendar.setTime(list.get(i).getSalesDate());
 			c.setSales_Date__c(calendar);
 			if(null!=list.get(i).getQty()&&list.get(i).getQty()!=0) {
@@ -74,7 +77,7 @@ public class DirectionService extends LoggerUtil{
 			}else {
 				c.setQuantity__c(0.0);
 			}
-			
+
 			if(null!=list.get(i).getProvinceNameCn()&&!list.get(i).getProvinceNameCn().equals("NULL")) {
 				c.setProvinceName__c(list.get(i).getProvinceNameCn());
 			}else {
@@ -109,7 +112,7 @@ public class DirectionService extends LoggerUtil{
 				c.setPrimaryKey__c("");
 			}
 			if(null!=list.get(i).getGroupName()&&!list.get(i).getGroupName().equals("NULL")) {
-			c.setGroup_Name__c(list.get(i).getGroupName());
+				c.setGroup_Name__c(list.get(i).getGroupName());
 			}else {
 				c.setGroup_Name__c("");
 			}
@@ -133,7 +136,7 @@ public class DirectionService extends LoggerUtil{
 		int errorCount=0;
 		//成功条数
 		int successCount=0;
-		
+
 		//记录失败原Id
 		List<String> errorListId=new ArrayList<>();
 		//记录失败原因 
