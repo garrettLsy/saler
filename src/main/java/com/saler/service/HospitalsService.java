@@ -11,12 +11,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.saler.async.HospitalsAsync;
 import com.saler.mapper.HospitalsMapper;
 import com.saler.pojo.Hospitals;
 import com.sforce.soap.enterprise.EnterpriseConnection;
 import com.sforce.soap.enterprise.QueryResult;
 import com.sforce.soap.enterprise.UpsertResult;
-import com.sforce.soap.enterprise.sobject.Interface_Log__c;
 import com.sforce.soap.enterprise.sobject.Pharm__c;
 import com.sforce.ws.ConnectionException;
 
@@ -31,9 +31,9 @@ public class HospitalsService {
 	@Autowired
 	InterfaceLogService interfaceLogService;
 	/*@Autowired
-	private RestTemplate restTemplate;
+	private RestTemplate restTemplate;*/
 	@Autowired
-	private HospitalsAsync async;*/
+	private HospitalsAsync async;
 
 	public List<Hospitals> query(){
 		return hm.selectAll();
@@ -46,6 +46,10 @@ public class HospitalsService {
 		List<Map<String,Object>> errorKeyValue=new ArrayList<>();
 		//记录失败原因
 		List<String> errorString=new ArrayList<>();
+		//失败条数统计
+		int errorCount=0;
+		 //错误数据id
+		List<String> errorPharm_cList_ID=new ArrayList<>();
 		SFCELoginService login=new SFCELoginService();
 		EnterpriseConnection connection=login.getconnection();
 		Example example=new Example(Hospitals.class);
@@ -54,14 +58,13 @@ public class HospitalsService {
 			.andLessThanOrEqualTo("modifyon", endTime).orGreaterThanOrEqualTo("createon", beginTime)
 			.andLessThanOrEqualTo("createon", endTime);
 		}
-		List<Hospitals> list=hm.selectByExample(example).subList(0, 100);
+		List<Hospitals> list=hm.selectByExample(example);
 
-		/*try {
-			async.addMysqlHospitals(restTemplate, list);
+		try {
+			async.addMysqlHospitals(list);
 		}catch(Exception e) {
 			System.out.println("没有灵魂的代码");
-		}*/
-		/*List<Hospitals> list=hm.selectAll();*/
+		}
 		logger.debug("从数据库读取到\t"+list.size()+"\t条");
 		List<Pharm__c> csList=new ArrayList<>();
 		Pharm__c c = null;
@@ -116,7 +119,7 @@ public class HospitalsService {
 					c.setNumberOfBeds__c((double)list.get(i).getNoofbeds());
 				}
 				//时间转日历
-				
+
 				if(null==list.get(i).getModifyon()) {
 					c.setModifyOn__c(null);
 
@@ -138,7 +141,7 @@ public class HospitalsService {
 				c.setGrade__c(list.get(i).getGrade());
 				//c.setDistributor__c(list.get(i).get);
 				//时间转日历
-			
+
 				if(null==list.get(i).getCreateon()) {
 					c.setCreateOn__c(null);
 				}else {
@@ -183,6 +186,8 @@ public class HospitalsService {
 				Map<String,Object> maps=new HashMap<>();
 				maps.put(list.get(i).getHospitalid(), "数据异常");
 				errorKeyValue.add(maps);
+				errorPharm_cList_ID.add(list.get(i).getHospitalid());
+				errorCount++;
 				continue;
 			}
 			csList.add(c);
@@ -194,14 +199,12 @@ public class HospitalsService {
 		int remainder=csList.size()%198;
 		//统计
 		int statistics=0;
-		//失败条数统计
-		int errorCount=0;
 		//成功条数
 		int successCount=0;
 		//用于记录数据
 		List<Pharm__c> cs2=new ArrayList<>();
 		//-----------------------------
-		List<String> errorPharm_cList_ID=new ArrayList<>(); //错误数据id
+		
 		List<String> errorPharm_cMessage=new ArrayList<>();//错误数据内容
 		//List<Hospitals> HospitalsList=new ArrayList<>();
 		Pharm__c [] cs=null;
@@ -209,10 +212,8 @@ public class HospitalsService {
 			for(int i=0;i<csList.size();i++) {
 				cs2.add(csList.get(i));
 				if(cs2.size()>=198) {
-					cs=new Pharm__c[cs2.size()];
-					for(int v=0;v<cs2.size();v++) {
-						cs[v]=cs2.get(v);
-					}
+					cs=cs2.toArray(new Pharm__c[cs2.size()] );
+					
 					UpsertResult[] results=connection.upsert("Pharm_Code__c", cs);
 					for (int v=0; v< results.length; v++) {
 						if (results[v].isSuccess()) {
@@ -232,10 +233,7 @@ public class HospitalsService {
 					cs.clone();
 					statistics++;
 				}else if (remainder==cs2.size()&&count==statistics) {
-					cs=new Pharm__c[cs2.size()];
-					for(int v=0;v<cs2.size();v++) {
-						cs[v]=cs2.get(v);
-					}
+					cs=cs2.toArray(new Pharm__c[cs2.size()] );
 					UpsertResult[] results=connection.upsert("Pharm_Code__c", cs);
 					for (int v=0; v< results.length; v++) {
 						if (results[v].isSuccess()) {

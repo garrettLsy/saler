@@ -3,7 +3,6 @@ package com.saler.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.saler.config.PropertiesConfig;
 import com.sforce.soap.enterprise.Connector;
 import com.sforce.soap.enterprise.EnterpriseConnection;
 import com.sforce.ws.ConnectionException;
@@ -29,7 +28,6 @@ public class SFCELoginService {
 	//SFCE登录
 	public void SFCDnewConnection() {
 		/*PropertiesConfig pc=new PropertiesConfig("./application.properties");
-	
 		String userName=(String)pc.getProperties().getProperty("salesforce.userName");
 		String userPassWord=pc.getProperties().getProperty("salesforce.password");*/
 		String userName="wilson.chen@allianture.com";

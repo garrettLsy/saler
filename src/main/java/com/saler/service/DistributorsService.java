@@ -50,7 +50,7 @@ public class DistributorsService {
 		}
 		List<Distributors> list=distributorsMapper.selectByExample(example);
 		/*try {
-			async.addMysqlDistributors(restTemplate, list);
+			async.addMysqlDistributors(restTemplate,list);
 		}catch(Exception e) {
 			System.out.println("没有灵魂的代码");
 		}*/
@@ -129,7 +129,7 @@ public class DistributorsService {
 		//统计每次198插入过后，余数
 		int remainder=csList.size()%198;
 		//统计
-		/*	int statistics=0;*/
+			int statistics=0;
 		//计数
 		int sum=0;
 		//失败条数统计
@@ -146,13 +146,8 @@ public class DistributorsService {
 			for(int i=0;i<csList.size();i++) {
 				cs2.add(csList.get(i));
 				if(cs2.size()>=198) {
-					cs=new Distributor__c[cs2.size()];
-					for(int v=0;v<cs2.size();v++) {
-						cs[v]=cs2.get(v);
-					}
+					cs=cs2.toArray(new Distributor__c[cs2.size()]);
 					UpsertResult[] results=connection.upsert("Distributor_Code__c", cs);
-					//SaveResult[] results=connection.create(cs);
-					//results[1].
 					for (int v=0; v< results.length; v++) {
 						if (results[v].isSuccess()) {
 							logger.debug(v+". Successfully created record - Id: " + results[v].getId());
@@ -171,11 +166,9 @@ public class DistributorsService {
 					cs.clone();
 					sum++;
 				}else if (remainder==cs2.size()&&count==sum) {
-					cs=new Distributor__c[cs2.size()];
-					for(int v=0;v<cs2.size();v++) {
-						cs[v]=cs2.get(v);
-					}
-					//SaveResult[] results=connection.create(cs);
+					//转换为数据格式
+					cs=cs2.toArray(new Distributor__c[cs2.size()]);
+
 					UpsertResult[] results=connection.upsert("Distributor_Code__c", cs);
 					for (int v=0; v< results.length; v++) {
 						if (results[v].isSuccess()) {

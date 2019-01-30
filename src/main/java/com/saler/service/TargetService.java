@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.saler.async.HospitalsAsync;
 import com.saler.mapper.TargetMapper;
@@ -18,6 +19,7 @@ import com.saler.pojo.Target;
 import com.sforce.soap.enterprise.EnterpriseConnection;
 import com.sforce.soap.enterprise.UpsertResult;
 import com.sforce.soap.enterprise.sobject.SARA_Target_Hospital__c;
+import com.sforce.ws.ConnectionException;
 
 import tk.mybatis.mapper.entity.Example;
 
@@ -29,7 +31,8 @@ public class TargetService {
 	private TargetMapper tm;
 	@Autowired
 	private HospitalsAsync async;
-
+	@Autowired
+	private RestTemplate restTemplate;
 	@Autowired
 	InterfaceLogService interfaceLogService;
 	public Map<String,Object> save(String beginTime,String endTime){
@@ -42,42 +45,42 @@ public class TargetService {
 		//登录saleforce
 		EnterpriseConnection connection=loginService.getconnection();
 		Example example=new Example(Target.class);
-		if(null!=beginTime&&null!=endTime) {
+		if(null!=beginTime&&null!=endTime&&!"".equals(beginTime)&&!"".equals(endTime)) {
 			example.createCriteria().andGreaterThanOrEqualTo("createon", beginTime)
 			.andLessThanOrEqualTo("createon", endTime).orGreaterThanOrEqualTo("modifyon", beginTime)
 			.andLessThanOrEqualTo("modifyon", endTime);
 		}
-		List<Target> list=tm.selectByExample(example).subList(0, 5);
+		List<Target> list=tm.selectByExample(example).subList(0, 4);
 		for(Target tt: list) {
 			System.out.println( tt.getId()+"\t"+tt.getPeriod());
 		}
-		
-		try {
-			async.addMysqlTarget(list);
+
+	/*	try {
+			async.addMysqlTarget(list,restTemplate);
 		}catch(Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 		logger.debug("从数据库拉去到\t"+list.size()+"\t条");
 		List<SARA_Target_Hospital__c> listArray=new ArrayList<>();
 		SARA_Target_Hospital__c c=null;
 		Calendar calendar=null;
 		for(int i=0,p=list.size();i<p;i++) {
-			
+
 
 
 			try {
 				c=new SARA_Target_Hospital__c();
 				c.setExternal_Key__c(list.get(i).getId().toString());
+				//TimeZone.setDefault(TimeZone.getTimeZone("GMT+8"));
 				calendar=Calendar.getInstance();
 				calendar.setTime(list.get(i).getPeriod());
-				calendar.add(Calendar.HOUR_OF_DAY, 8);
-
+				calendar.add(Calendar.HOUR_OF_DAY, 12);
 				c.setPeriod__c(calendar);
 
 				c.setPharm_Code__c(list.get(i).getHospitalid());
-				
+
 				c.setProduct_Code__c(list.get(i).getProductid());
-				
+
 				c.setTarget_Unit__c(list.get(i).getTargetunit());
 				if(null!=list.get(i).getModifyby()&&!list.get(i).getModifyby().equals("NULL")) {
 					c.setModifyBy__c(list.get(i).getModifyby());
@@ -167,10 +170,10 @@ public class TargetService {
 				}
 
 			}
-		}/*catch(ConnectionException e) {
+		}catch(ConnectionException e) {
 			e.printStackTrace();
-		}*/catch(Exception ee){
-			ee.printStackTrace();
+		}catch(Exception ee){
+			ee.printStackTrace();	
 		}finally {
 			loginService.closeSFCE(connection);
 		}
@@ -183,6 +186,7 @@ public class TargetService {
 		map.put("total", listArray.size());
 		map.put("success", successCount);
 		map.put("error", errorCount);
+
 		return map;
 	}
 }

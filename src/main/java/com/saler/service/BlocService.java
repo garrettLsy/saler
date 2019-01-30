@@ -56,7 +56,7 @@ public class BlocService {
 		}
 		List<Bloc> list=bm.selectByExample(example);
 		/*try {
-			async.addMysqlBloc(restTemplate, list);
+			async.addMysqlBloc( list);
 		} catch (Exception e) {
 			System.out.println("木有灵魂的代码");	
 			e.printStackTrace();
@@ -149,10 +149,8 @@ public class BlocService {
 			for(int i=0;i<clist.size();i++) {
 				adclist.add(clist.get(i));
 				if(adclist.size()>=198) {
-					adcArray=new AMAP_Data__c[adclist.size()];
-					for(int v=0;v<adclist.size();v++) {
-						adcArray[v]=adclist.get(v);
-					}
+					adcArray=adclist.toArray(new AMAP_Data__c[adclist.size()]);
+					
 					UpsertResult[] results=connection.upsert("PrimaryKey4Group__c", adcArray);
 					//SaveResult[] results=connection.create(adcArray);
 					for (int v=0; v< results.length; v++) {
@@ -174,10 +172,7 @@ public class BlocService {
 					adclist.clear();
 					statistics++;
 				}else if(remainder==adclist.size()&&count==statistics) {
-					adcArray=new AMAP_Data__c[adclist.size()];
-					for(int v=0;v<adclist.size();v++) {
-						adcArray[v]=adclist.get(v);
-					}
+					adcArray=adclist.toArray(new AMAP_Data__c[adclist.size()]);
 					UpsertResult[] results=connection.upsert("PrimaryKey4Group__c", adcArray);
 					for (int v=0; v< results.length; v++) {
 						if (results[v].isSuccess()) {

@@ -13,7 +13,6 @@ import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.saler.config.RestTemplateConfig;
 import com.saler.pojo.Bloc;
 import com.saler.pojo.Direction;
 import com.saler.pojo.Distributors;
@@ -26,34 +25,35 @@ public class HospitalsAsync {
 	private RestTemplate restTemplates;
 	@Async
 	@Transactional(propagation=Propagation.REQUIRED)
-	public void addMysqlHospitals(RestTemplate restTemplate,List<Hospitals> list) {
-		restTemplate.postForObject(LoggerUtil.HERO_HTTP+"/sale/addhospitals",JSONArray.parseArray(JSON.toJSONString(list)),Boolean.class);
+	public void addMysqlHospitals(List<Hospitals> list) {
+		restTemplates.postForObject(LoggerUtil.HERO_HTTP+"/sale/addhospitals",JSONArray.parseArray(JSON.toJSONString(list)),Boolean.class);
 	}
 	
 	@Async
 	@Transactional(propagation=Propagation.REQUIRED)
 	public void addMysqlDistributors(RestTemplate restTemplate,List<Distributors> list) {
-		restTemplate.postForObject(LoggerUtil.HERO_HTTP+"/sale/adddistributors", JSONArray.parseArray(JSON.toJSONString(list)), Boolean.class);
+		restTemplates.postForObject(LoggerUtil.HERO_HTTP+"/sale/adddistributors", JSONArray.parseArray(JSON.toJSONString(list)), Boolean.class);
 	}
 	@Async
 	@Transactional(propagation=Propagation.REQUIRED)
-	public void addMysqlDirction(List<Direction> list,String version) {
+	public void addMysqlDirction(RestTemplate restTemplate,List<Direction> list,String version) {
 		Map<String,Object> map=new HashMap<>();
 		map.put("list",JSON.toJSONString(list));
 		map.put("version", version);
-		restTemplates.postForObject(LoggerUtil.HERO_HTTP+"/sale/adddirection", map, Boolean.class);
+		System.out.println("sdaf");
+		restTemplate.postForObject(LoggerUtil.HERO_HTTP+"/sale/adddirection", map, Boolean.class);
 	}
 	@Async
 	@Transactional(propagation=Propagation.REQUIRED)
-	public void addMysqlBloc(RestTemplate restTemplate,List<Bloc> list) {
-		restTemplate.postForObject(LoggerUtil.HERO_HTTP+"/sale/addbloc", JSONArray.parseArray(JSON.toJSONString(list)), Boolean.class);
+	public void addMysqlBloc(List<Bloc> list) {
+		restTemplates.postForObject(LoggerUtil.HERO_HTTP+"/sale/addbloc", JSONArray.parseArray(JSON.toJSONString(list)), Boolean.class);
 	}
 	
 
 	@Async
 	@Transactional(propagation=Propagation.REQUIRED)
-	public void addMysqlTarget(List<Target> list) {
-		restTemplates.postForObject(LoggerUtil.HERO_HTTP+"/sale/addtarget", JSONArray.parseArray(JSON.toJSONString(list)), Boolean.class);
+	public void addMysqlTarget(List<Target> list,RestTemplate restTemplate) {
+		restTemplate.postForObject(LoggerUtil.HERO_HTTP+"/sale/addtarget", JSONArray.parseArray(JSON.toJSONString(list)), Boolean.class);
 		
 	}
 	

@@ -2,6 +2,7 @@ package com.saler.service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -41,23 +42,24 @@ public class DirectionService extends LoggerUtil{
 		String  timeVersion=formatter.format(new Date());
 		SFCELoginService loginService=new SFCELoginService();
 		//链接salesforce
-
 		EnterpriseConnection connection=loginService.getconnection();
+		//失败条数统计
+		int errorCount=0;
 		//查询本地数据库
 		Example example=new Example(Direction.class);
 		if(null!=beginTime&&null!=endTime) {
 			example.createCriteria().andGreaterThanOrEqualTo("salesDate",beginTime).andLessThanOrEqualTo("salesDate",endTime);
 		}
-		List<Direction> list=dm.selectByExample(example).subList(0, 5);
-		for(Direction d:list) {
+		List<Direction> list=dm.selectByExample(example).subList(0, 3);
+		/*for(Direction d:list) {
 			System.out.println(d.getAmapId()+"\t"+d.getSalesDate());
-		}
-		try {
-			async.addMysqlDirction( list, timeVersion);
+		}*/
+		/*try {
+			async.addMysqlDirction(restTemplate, list, timeVersion);
 		} catch (Exception e) {
 			System.out.println("木有灵魂的代码");	
 			e.printStackTrace();
-		}
+		}*/
 
 		List<AMAP_Data__c> clist=new ArrayList<>();
 		AMAP_Data__c c=null;
@@ -71,6 +73,7 @@ public class DirectionService extends LoggerUtil{
 
 			calendar=Calendar.getInstance();
 			calendar.setTime(list.get(i).getSalesDate());
+			calendar.add(Calendar.HOUR_OF_DAY, 12);
 			c.setSales_Date__c(calendar);
 			if(null!=list.get(i).getQty()&&list.get(i).getQty()!=0) {
 				c.setQuantity__c((double)list.get(i).getQty());
@@ -132,8 +135,7 @@ public class DirectionService extends LoggerUtil{
 		int remainder=clist.size()%198;
 		//统计
 		int statistics=0;
-		//失败条数统计
-		int errorCount=0;
+
 		//成功条数
 		int successCount=0;
 
@@ -145,11 +147,8 @@ public class DirectionService extends LoggerUtil{
 			for(int i=0;i<clist.size();i++) {
 				adclist.add(clist.get(i));
 				if(adclist.size()>=198) {
-					adcArray=new AMAP_Data__c[adclist.size()];
-					for(int v=0;v<adclist.size();v++) {
-						adcArray[v]=adclist.get(v);
-					}
-					//UpsertResult[] results=connection.upsert("PriadcArray);
+					//转换为数组格式
+					adcArray=adclist.toArray(new AMAP_Data__c[adclist.size()]);
 					SaveResult[] results=connection.create(adcArray);
 					for (int v=0; v< results.length; v++) {
 						if (results[v].isSuccess()) {
@@ -165,16 +164,13 @@ public class DirectionService extends LoggerUtil{
 							}
 						}    
 					}
-
 					adcArray.clone();
 					adclist.clear();
 					statistics++;
 				}else if(remainder==adclist.size()&&count==statistics) {
-					adcArray=new AMAP_Data__c[adclist.size()];
-					for(int v=0;v<adclist.size();v++) {
-						adcArray[v]=adclist.get(v);
-					}
-					//UpsertResult[] results=connection.upsert("PrimaryKey__c", adcArray);
+					//转换为数组格式
+					adcArray=adclist.toArray(new AMAP_Data__c[adclist.size()]);
+					//插入
 					SaveResult[] results=connection.create(adcArray);
 					for (int v=0; v< results.length; v++) {
 						if (results[v].isSuccess()) {
