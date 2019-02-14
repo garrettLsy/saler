@@ -81,9 +81,9 @@ public class DistributorsService {
 			}
 			c.setModifyBy__c(list.get(i).getModifyby());
 			if(list.get(i).getDeleted().equals(0)) {
-				c.setIs_Deleted__c(true);
-			}else {
 				c.setIs_Deleted__c(false);
+			}else {
+				c.setIs_Deleted__c(true);
 			}
 			if(null!=list.get(i).getNamecn()&&!list.get(i).getNamecn().equals("NULL")) {
 				c.setDistributor_Name_CN__c(list.get(i).getNamecn().trim());

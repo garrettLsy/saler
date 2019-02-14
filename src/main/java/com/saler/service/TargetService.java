@@ -99,9 +99,9 @@ public class TargetService {
 				calendar.setTime(list.get(i).getCreateon());
 				c.setCreateOn__c(calendar);
 				if(list.get(i).getDeleted()==0) {
-					c.setDeleted__c(true);
-				}else {
 					c.setDeleted__c(false);
+				}else {
+					c.setDeleted__c(true);
 				}
 				listArray.add(c);
 			}catch(Exception e) {

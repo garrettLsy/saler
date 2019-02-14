@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.saler.config.AESConfig;
 import com.saler.service.BlocService;
 import com.saler.service.DirectionService;
 import com.saler.service.DistributorsService;
@@ -36,15 +37,11 @@ public class SalerApplicationTests {
 	public void contextLoads() {
 		/*SFCELoginService login=new SFCELoginService();
 		login.getconnection();*/
-
-		SimpleDateFormat sdf=new SimpleDateFormat("yyyy");
-		SimpleDateFormat sdf2=new SimpleDateFormat("yyyy-MM-dd");
-		/*String date=sdf.format(new Date());
-		String date2=sdf2.format(new Date());*/
-		
-	
-		
-		System.out.println(sdf.format(new Date())+"-01-01"+"\t"+sdf2.format(new Date()));
+		 byte[] encr=AESConfig.encrypt("hello world", "123456");
+		 System.out.println(new String(encr));
+		 
+		 byte[] decry= AESConfig.decrypt(encr, "123456");
+		 System.out.println(new String(decry));
 	}
 
 	@Test

@@ -133,9 +133,9 @@ public class HospitalsService {
 					c.setIs_Deleted__c(null);
 				}
 				else if(list.get(i).getDeleted().equals(0)) {
-					c.setIs_Deleted__c(true);
-				}else {
 					c.setIs_Deleted__c(false);
+				}else {
+					c.setIs_Deleted__c(true);
 				}
 				//c.setGroup_Name__c(list.get(i).getg);
 				c.setGrade__c(list.get(i).getGrade());
