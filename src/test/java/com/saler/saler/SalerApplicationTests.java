@@ -15,6 +15,7 @@ import com.saler.service.DirectionService;
 import com.saler.service.DistributorsService;
 import com.saler.service.HospitalsService;
 import com.saler.service.TargetService;
+import com.saler.util.MD5Util;
 
 
 
@@ -37,11 +38,20 @@ public class SalerApplicationTests {
 	public void contextLoads() {
 		/*SFCELoginService login=new SFCELoginService();
 		login.getconnection();*/
-		 byte[] encr=AESConfig.encrypt("hello world", "123456");
+		/* byte[] encr=AESConfig.encrypt("hello world", "123456");
 		 System.out.println(new String(encr));
 		 
 		 byte[] decry= AESConfig.decrypt(encr, "123456");
-		 System.out.println(new String(decry));
+		 System.out.println(new String(decry));*/
+		 
+		 
+		/* 
+		String userName = "wilson.chen@allianture.com.alt1"; 
+		String password = "demo123456";
+		 String ss="wilson.chen@allianture.com.alt1:demo123456";
+		 System.out.println(ss);
+		String set= MD5Util.string2MD5(ss);
+		 System.out.println(set);*/
 	}
 
 	@Test
@@ -50,7 +60,7 @@ public class SalerApplicationTests {
 		ds.add(null,null);
 		hs.add(null, null);
 		dn.add(null,null);*/
-		ts.save(null,null);
+	/*	ts.save(null,null);*/
 	}
 
 

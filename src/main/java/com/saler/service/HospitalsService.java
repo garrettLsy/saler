@@ -60,11 +60,11 @@ public class HospitalsService {
 		}
 		List<Hospitals> list=hm.selectByExample(example);
 
-		try {
+		/*try {
 			async.addMysqlHospitals(list);
 		}catch(Exception e) {
 			System.out.println("没有灵魂的代码");
-		}
+		}*/
 		logger.debug("从数据库读取到\t"+list.size()+"\t条");
 		List<Pharm__c> csList=new ArrayList<>();
 		Pharm__c c = null;

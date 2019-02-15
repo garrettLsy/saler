@@ -50,7 +50,7 @@ public class TargetService {
 			.andLessThanOrEqualTo("createon", endTime).orGreaterThanOrEqualTo("modifyon", beginTime)
 			.andLessThanOrEqualTo("modifyon", endTime);
 		}
-		List<Target> list=tm.selectByExample(example).subList(0, 4);
+		List<Target> list=tm.selectByExample(example);
 		for(Target tt: list) {
 			System.out.println( tt.getId()+"\t"+tt.getPeriod());
 		}
@@ -153,8 +153,6 @@ public class TargetService {
 					for (int v=0; v< results.length; v++) {
 						if (results[v].isSuccess()) {
 							logger.debug(v+". Successfully created record - Id: " + results[v].getId());
-							SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-							System.out.println(sdf.format(sthArray[v].getPeriod__c().getTime()));
 							successCount++;					
 						} else {
 							com.sforce.soap.enterprise.Error[] errors = results[v].getErrors();
