@@ -50,20 +50,23 @@ public class DistributorsController {
 		String objectType=param.getString("objectType");
 		String header=request.getHeader("Authorization");
 		if(header.equals(MD5Util.returnMD5())) {
-
+			map.put("flag", 0);
+			map.put("errorMsg", "");
 			if(objectType.equals("Pharm")) {
-				return hospitalsService.add(beginTime, endTime);
+				map.put("content",hospitalsService.add(beginTime, endTime));
 			}else if(objectType.equals("Distributor")) {
-				return	distributorsService.add(beginTime, endTime);
+				map.put("content",distributorsService.add(beginTime, endTime));
 			}else if(objectType.equals("SalesData")) {
-				return directionService.add(beginTime, endTime);
+				map.put("content",directionService.add(beginTime, endTime));
 			}else if(objectType.equals("Group")) {
-				return	blocService.add(beginTime, endTime);
+				map.put("content",blocService.add(beginTime, endTime));
 			}else if(objectType.equals("Target")) {
-				return targetService.save(beginTime, endTime);
+				map.put("content",targetService.save(beginTime, endTime));
 			}
 		}else {
-			map.put("error", "请求不合法");
+			map.put("flag", 1);
+			map.put("errorMsg", "请求不合法");
+			map.put("content", new HashMap());
 		}
 		return map;
 	} 
