@@ -66,7 +66,6 @@ public class DistributorsController {
 		}else {
 			map.put("flag", 1);
 			map.put("errorMsg", "请求不合法");
-			map.put("content", new HashMap());
 		}
 		return map;
 	} 

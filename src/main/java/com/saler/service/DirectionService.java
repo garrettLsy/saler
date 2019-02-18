@@ -50,7 +50,7 @@ public class DirectionService extends LoggerUtil{
 		if(null!=beginTime&&null!=endTime) {
 			example.createCriteria().andGreaterThanOrEqualTo("salesDate",beginTime).andLessThanOrEqualTo("salesDate",endTime);
 		}
-		List<Direction> list=dm.selectByExample(example);
+		List<Direction> list=dm.selectByExample(example).subList(0, 10);
 		/*for(Direction d:list) {
 			System.out.println(d.getAmapId()+"\t"+d.getSalesDate());
 		}*/

@@ -48,7 +48,7 @@ public class DistributorsService {
 			.andLessThanOrEqualTo("modifyon", endTime).orGreaterThanOrEqualTo("createon", beginTime)
 			.andLessThanOrEqualTo("createon", endTime);
 		}
-		List<Distributors> list=distributorsMapper.selectByExample(example);
+		List<Distributors> list=distributorsMapper.selectByExample(example).subList(0, 10);
 		/*try {
 			async.addMysqlDistributors(restTemplate,list);
 		}catch(Exception e) {

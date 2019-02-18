@@ -50,10 +50,8 @@ public class TargetService {
 			.andLessThanOrEqualTo("createon", endTime).orGreaterThanOrEqualTo("modifyon", beginTime)
 			.andLessThanOrEqualTo("modifyon", endTime);
 		}
-		List<Target> list=tm.selectByExample(example);
-		for(Target tt: list) {
-			System.out.println( tt.getId()+"\t"+tt.getPeriod());
-		}
+		List<Target> list=tm.selectByExample(example).subList(0, 10);
+		
 
 	/*	try {
 			async.addMysqlTarget(list,restTemplate);

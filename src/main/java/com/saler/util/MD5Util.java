@@ -55,11 +55,11 @@ public class MD5Util {
     }  
   
 	public static String returnMD5() {
-    	/*PropertiesConfig pc=new PropertiesConfig("./application.properties");
+    	PropertiesConfig pc=new PropertiesConfig("./application.properties");
 		String userName=(String)pc.getProperties().getProperty("salesforce.md5Name");
-		String userPassWord=pc.getProperties().getProperty("salesforce.md5password");*/
-		String userName="wilson.chen@allianture.com.alt1";
-		String userPassWord="demo123456";
+		String userPassWord=pc.getProperties().getProperty("salesforce.md5password");
+		/*String userName="wilson.chen@allianture.com.alt1";
+		String userPassWord="demo123456";*/
 		return string2MD5(userName+":"+userPassWord);
     }
 }

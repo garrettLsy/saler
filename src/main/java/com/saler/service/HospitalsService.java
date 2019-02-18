@@ -58,7 +58,7 @@ public class HospitalsService {
 			.andLessThanOrEqualTo("modifyon", endTime).orGreaterThanOrEqualTo("createon", beginTime)
 			.andLessThanOrEqualTo("createon", endTime);
 		}
-		List<Hospitals> list=hm.selectByExample(example);
+		List<Hospitals> list=hm.selectByExample(example).subList(0, 10);
 
 		/*try {
 			async.addMysqlHospitals(list);

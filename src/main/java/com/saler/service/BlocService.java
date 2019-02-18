@@ -54,7 +54,7 @@ public class BlocService {
 			.andLessThanOrEqualTo("modifyon",endTime).orGreaterThanOrEqualTo("createon", beginTime)
 			.andLessThanOrEqualTo("createon", endTime);
 		}
-		List<Bloc> list=bm.selectByExample(example);
+		List<Bloc> list=bm.selectByExample(example).subList(0, 10);
 		/*try {
 			async.addMysqlBloc( list);
 		} catch (Exception e) {
