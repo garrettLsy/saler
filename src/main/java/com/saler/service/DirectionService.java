@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.saler.async.HospitalsAsync;
+import com.saler.async.SaleforceAddAsync;
 import com.saler.mapper.DirectionMapper;
 import com.saler.pojo.Direction;
 import com.saler.util.LoggerUtil;
@@ -34,182 +35,37 @@ public class DirectionService extends LoggerUtil{
 	private HospitalsAsync async;
 	@Autowired
 	private RestTemplate restTemplate;
+	
+	@Autowired
+	private SaleforceAddAsync addAsync;
 
 	public Map<String,Object> add(String beginTime,String endTime) {
 		Map<String,Object> map=new HashMap<>();
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
 		//以当前时间   获取版本号
 		String  timeVersion=formatter.format(new Date());
+		
 		SFCELoginService loginService=new SFCELoginService();
 		//链接salesforce
 		EnterpriseConnection connection=loginService.getconnection();
-		//失败条数统计
-		int errorCount=0;
+		
 		//查询本地数据库
 		Example example=new Example(Direction.class);
 		if(null!=beginTime&&null!=endTime) {
 			example.createCriteria().andGreaterThanOrEqualTo("salesDate",beginTime).andLessThanOrEqualTo("salesDate",endTime);
 		}
-		List<Direction> list=dm.selectByExample(example).subList(0, 10);
-		/*for(Direction d:list) {
-			System.out.println(d.getAmapId()+"\t"+d.getSalesDate());
-		}*/
+		List<Direction> list=dm.selectByExample(example);
+		
 		/*try {
 			async.addMysqlDirction(restTemplate, list, timeVersion);
 		} catch (Exception e) {
 			System.out.println("木有灵魂的代码");	
 			e.printStackTrace();
 		}*/
-
-		List<AMAP_Data__c> clist=new ArrayList<>();
-		AMAP_Data__c c=null;
-		Calendar calendar=null;
-		for(int i=0;i<list.size();i++) {
-			c=new AMAP_Data__c();
-			c.setVersion__c(timeVersion);
-			c.setType__c("Sales Data");
-			c.setStyle__c(list.get(i).getStyle());
-			c.setSales_Month__c(list.get(i).getMon());
-
-			calendar=Calendar.getInstance();
-			calendar.setTime(list.get(i).getSalesDate());
-			calendar.add(Calendar.HOUR_OF_DAY, 12);
-			c.setSales_Date__c(calendar);
-			if(null!=list.get(i).getQty()&&list.get(i).getQty()!=0) {
-				c.setQuantity__c((double)list.get(i).getQty());
-			}else {
-				c.setQuantity__c(0.0);
-			}
-
-			if(null!=list.get(i).getProvinceNameCn()&&!list.get(i).getProvinceNameCn().equals("NULL")) {
-				c.setProvinceName__c(list.get(i).getProvinceNameCn());
-			}else {
-				c.setProvinceName__c("");
-
-			}
-			if(null!=list.get(i).getProductNameEn()&&!list.get(i).getProductNameEn().equals("NULL")) {
-				c.setProduct_Name_EN__c(list.get(i).getProductNameEn());
-			}else {
-				c.setProduct_Name_EN__c("");
-			}
-			if(null!=list.get(i).getProductName()&&!list.get(i).getProductName().equals("NULL")) {
-				c.setProduct_Name__c(list.get(i).getProductName());
-			}else {
-				c.setProduct_Name__c("");
-			}
-			c.setProduct_Code__c(list.get(i).getProductId());
-			if(null!=list.get(i).getPharmNameCn()&&!list.get(i).getPharmNameCn().equals("NULL")) {
-				c.setPharm_Name__c(list.get(i).getPharmNameCn());
-			}else {
-				c.setPharm_Name__c("");
-			}
-			c.setPharm_Code__c(list.get(i).getPharmId());
-			c.setHospital_Name__c(list.get(i).getHospital());
-			c.setHospital_Code__c(list.get(i).getHospitalId());
-			c.setDistributor_Name__c(list.get(i).getDistName());
-			c.setDistributor_Code__c(list.get(i).getDistId());
-			c.setBrand__c(list.get(i).getBrand());
-			if(null!=list.get(i).getAmapId()&&!list.get(i).getAmapId().equals("NULL")) {
-				c.setPrimaryKey__c(list.get(i).getAmapId());
-			}else {
-				c.setPrimaryKey__c("");
-			}
-			if(null!=list.get(i).getGroupName()&&!list.get(i).getGroupName().equals("NULL")) {
-				c.setGroup_Name__c(list.get(i).getGroupName());
-			}else {
-				c.setGroup_Name__c("");
-			}
-			if(null!=list.get(i).getProductId()&&!list.get(i).getProductId().equals("NULL")) {
-				c.setProduct_Code__c(list.get(i).getProductId());
-			}else {
-				c.setProduct_Code__c("");
-			}
-			clist.add(c);
-		}
-		logger.debug("流向数据表--------------->\t从数据库中取到\t"+list.size()+"\t条");
-		AMAP_Data__c [] adcArray=null;
-		List<AMAP_Data__c> adclist=new ArrayList<>();
-		//统计每次198插入多少次
-		int count=clist.size()/198;
-		//统计每次198插入过后，余数
-		int remainder=clist.size()%198;
-		//统计
-		int statistics=0;
-
-		//成功条数
-		int successCount=0;
-
-		//记录失败原Id
-		List<String> errorListId=new ArrayList<>();
-		//记录失败原因 
-		List<String> errorListMsg=new ArrayList<>();
-		try {
-			for(int i=0;i<clist.size();i++) {
-				adclist.add(clist.get(i));
-				if(adclist.size()>=198) {
-					//转换为数组格式
-					adcArray=adclist.toArray(new AMAP_Data__c[adclist.size()]);
-					SaveResult[] results=connection.create(adcArray);
-					for (int v=0; v< results.length; v++) {
-						if (results[v].isSuccess()) {
-							logger.debug(v+". Successfully created record - Id: " + results[v].getId());
-							successCount++;
-						} else {
-							com.sforce.soap.enterprise.Error[] errors = results[v].getErrors();
-							for (int j=0; j< errors.length; j++) {
-								logger.warn("第"+v+"条"+"ERROR creating record: " + errors[j].getMessage());
-								errorListId.add(adcArray[v].getPrimaryKey__c());
-								errorListMsg.add(errors[j].getMessage());
-								errorCount++;
-							}
-						}    
-					}
-					adcArray.clone();
-					adclist.clear();
-					statistics++;
-				}else if(remainder==adclist.size()&&count==statistics) {
-					//转换为数组格式
-					adcArray=adclist.toArray(new AMAP_Data__c[adclist.size()]);
-					//插入
-					SaveResult[] results=connection.create(adcArray);
-					for (int v=0; v< results.length; v++) {
-						if (results[v].isSuccess()) {
-							logger.debug(v+". Successfully created record - Id: " + results[v].getId());
-							successCount++;
-						} else {
-							com.sforce.soap.enterprise.Error[] errors = results[v].getErrors();
-							for (int j=0; j< errors.length; j++) {
-								logger.warn("第"+v+"条"+"ERROR creating record: " + errors[j].getClass());
-								errorListId.add(adcArray[v].getPrimaryKey__c());
-								errorListMsg.add(errors[j].getMessage());
-								errorCount++;
-							}
-						}    
-					}
-
-					adcArray.clone();
-					adclist.clear();
-				}
-			}
-		}catch(Exception e) {
-			e.printStackTrace();
-		}finally {
-			loginService.closeSFCE(connection);
-		}
-		//将错误信息插入 错误信息收集表
-		if(0<errorCount) {
-			interfaceLogService.addInterfaceLog(errorListId, errorListMsg, "SalesData");
-		}
-		logger.debug("此次流向数据表<AMAP_Data__c>导入成功条数为\t"+successCount+"\t条"+
-				"\n失败条数为"+errorCount+"\t条"+"\n失败信息为:"+errorListMsg+"\n失败数据为:\n"+errorListId+"\n版本号为:"+timeVersion);
-		map.put("Object","SalesData");
-		map.put("total", clist.size());
-		map.put("success", successCount);
-		map.put("error", errorCount);
-		map.put("version", timeVersion);
+		map.put("flag", 0);
+		map.put("errorMsg","");
+		addAsync.addDirection(list, interfaceLogService, timeVersion);
 		return map;
 	}
-
-
 
 }

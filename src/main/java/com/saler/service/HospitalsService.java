@@ -1,7 +1,5 @@
 package com.saler.service;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,13 +8,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.saler.async.HospitalsAsync;
+import com.saler.async.SaleforceAddAsync;
 import com.saler.mapper.HospitalsMapper;
 import com.saler.pojo.Hospitals;
 import com.sforce.soap.enterprise.EnterpriseConnection;
 import com.sforce.soap.enterprise.QueryResult;
-import com.sforce.soap.enterprise.UpsertResult;
 import com.sforce.soap.enterprise.sobject.Pharm__c;
 import com.sforce.ws.ConnectionException;
 
@@ -30,16 +29,14 @@ public class HospitalsService {
 	private HospitalsMapper hm;
 	@Autowired
 	InterfaceLogService interfaceLogService;
-	/*@Autowired
-	private RestTemplate restTemplate;*/
+	@Autowired
+	private RestTemplate restTemplate;
 	@Autowired
 	private HospitalsAsync async;
-
-	public List<Hospitals> query(){
-		return hm.selectAll();
-	}
-
-	@SuppressWarnings("unlikely-arg-type")
+	@Autowired
+	private SaleforceAddAsync addAsync;
+	
+	/*@SuppressWarnings("unlikely-arg-type")
 	public Map<String,Object> add(String beginTime,String endTime) {
 		Map<String,Object> map=new HashMap<>();
 		//记录失败数据  id:value
@@ -60,11 +57,11 @@ public class HospitalsService {
 		}
 		List<Hospitals> list=hm.selectByExample(example).subList(0, 10);
 
-		/*try {
+		try {
 			async.addMysqlHospitals(list);
 		}catch(Exception e) {
 			System.out.println("没有灵魂的代码");
-		}*/
+		}
 		logger.debug("从数据库读取到\t"+list.size()+"\t条");
 		List<Pharm__c> csList=new ArrayList<>();
 		Pharm__c c = null;
@@ -204,7 +201,7 @@ public class HospitalsService {
 		//用于记录数据
 		List<Pharm__c> cs2=new ArrayList<>();
 		//-----------------------------
-		
+
 		List<String> errorPharm_cMessage=new ArrayList<>();//错误数据内容
 		//List<Hospitals> HospitalsList=new ArrayList<>();
 		Pharm__c [] cs=null;
@@ -213,7 +210,7 @@ public class HospitalsService {
 				cs2.add(csList.get(i));
 				if(cs2.size()>=198) {
 					cs=cs2.toArray(new Pharm__c[cs2.size()] );
-					
+
 					UpsertResult[] results=connection.upsert("Pharm_Code__c", cs);
 					for (int v=0; v< results.length; v++) {
 						if (results[v].isSuccess()) {
@@ -275,7 +272,26 @@ public class HospitalsService {
 
 		return map;
 	}
-
+	 */
+	public Map<String,Object> add(String beginTime,String endTime) {
+		Map<String,Object> map=new HashMap<>();
+		Example example=new Example(Hospitals.class);
+		if(null!=beginTime&&null!=endTime) {
+			example.createCriteria().andGreaterThanOrEqualTo("modifyon",beginTime)
+			.andLessThanOrEqualTo("modifyon", endTime).orGreaterThanOrEqualTo("createon", beginTime)
+			.andLessThanOrEqualTo("createon", endTime);
+		}
+		List<Hospitals> list=hm.selectByExample(example);
+		/*try {
+			async.addMysqlHospitals(list);
+		}catch(Exception e) {
+			System.out.println("没有灵魂的代码");
+		}*/
+		addAsync.addHospitals(list, interfaceLogService);
+		map.put("flag", 0);
+		map.put("errorMsg","");
+		return map;
+	}
 
 	public void  querySFDC() {
 		SFCELoginService loginService=new SFCELoginService();

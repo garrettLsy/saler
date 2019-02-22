@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.saler.async.HospitalsAsync;
+import com.saler.async.SaleforceAddAsync;
 import com.saler.mapper.TargetMapper;
 import com.saler.pojo.Target;
 import com.sforce.soap.enterprise.EnterpriseConnection;
@@ -34,8 +35,10 @@ public class TargetService {
 	@Autowired
 	private RestTemplate restTemplate;
 	@Autowired
-	InterfaceLogService interfaceLogService;
-	public Map<String,Object> save(String beginTime,String endTime){
+	private InterfaceLogService interfaceLogService;
+	@Autowired
+	private SaleforceAddAsync addAsync;
+	/*public Map<String,Object> save(String beginTime,String endTime){
 		Map<String,Object> map=new HashMap<>();
 		//记录失败id
 		List<String> errorIdList=new ArrayList<>();
@@ -51,13 +54,13 @@ public class TargetService {
 			.andLessThanOrEqualTo("modifyon", endTime);
 		}
 		List<Target> list=tm.selectByExample(example).subList(0, 10);
-		
 
-	/*	try {
+
+		try {
 			async.addMysqlTarget(list,restTemplate);
 		}catch(Exception e) {
 			e.printStackTrace();
-		}*/
+		}
 		logger.debug("从数据库拉去到\t"+list.size()+"\t条");
 		List<SARA_Target_Hospital__c> listArray=new ArrayList<>();
 		SARA_Target_Hospital__c c=null;
@@ -183,6 +186,26 @@ public class TargetService {
 		map.put("success", successCount);
 		map.put("error", errorCount);
 
+		return map;
+	}*/
+
+	public Map<String,Object> save(String beginTime,String endTime){
+		Map<String,Object> map=new HashMap<>();
+		Example example=new Example(Target.class);
+		if(null!=beginTime&&null!=endTime&&!"".equals(beginTime)&&!"".equals(endTime)) {
+			example.createCriteria().andGreaterThanOrEqualTo("createon", beginTime)
+			.andLessThanOrEqualTo("createon", endTime).orGreaterThanOrEqualTo("modifyon", beginTime)
+			.andLessThanOrEqualTo("modifyon", endTime);
+		}
+		List<Target> list=tm.selectByExample(example);
+	/*	try {
+			async.addMysqlTarget(list,restTemplate);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}*/
+		addAsync.addtTarGet(list, interfaceLogService);
+		map.put("flag", 0);
+		map.put("errorMsg","");
 		return map;
 	}
 }

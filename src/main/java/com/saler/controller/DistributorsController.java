@@ -50,18 +50,16 @@ public class DistributorsController {
 		String objectType=param.getString("objectType");
 		String header=request.getHeader("Authorization");
 		if(header.equals(MD5Util.returnMD5())) {
-			map.put("flag", 0);
-			map.put("errorMsg", "");
 			if(objectType.equals("Pharm")) {
-				map.put("content",hospitalsService.add(beginTime, endTime));
+				return hospitalsService.add(beginTime, endTime);
 			}else if(objectType.equals("Distributor")) {
-				map.put("content",distributorsService.add(beginTime, endTime));
+				return distributorsService.add(beginTime, endTime);
 			}else if(objectType.equals("SalesData")) {
-				map.put("content",directionService.add(beginTime, endTime));
+				return directionService.add(beginTime, endTime);
 			}else if(objectType.equals("Group")) {
-				map.put("content",blocService.add(beginTime, endTime));
+				return blocService.add(beginTime, endTime);
 			}else if(objectType.equals("Target")) {
-				map.put("content",targetService.save(beginTime, endTime));
+				return targetService.save(beginTime, endTime);
 			}
 		}else {
 			map.put("flag", 1);

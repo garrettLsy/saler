@@ -1,7 +1,5 @@
 package com.saler.service;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,14 +11,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.saler.async.HospitalsAsync;
+import com.saler.async.SaleforceAddAsync;
 import com.saler.mapper.DistributorsMapper;
 import com.saler.pojo.Distributors;
 import com.sforce.soap.enterprise.EnterpriseConnection;
 import com.sforce.soap.enterprise.QueryResult;
-import com.sforce.soap.enterprise.UpsertResult;
 import com.sforce.soap.enterprise.sobject.Distributor__c;
 import com.sforce.ws.ConnectionException;
-import com.sforce.soap.enterprise.Error;
+
 import tk.mybatis.mapper.entity.Example;
 @Service
 public class DistributorsService {
@@ -33,11 +31,13 @@ public class DistributorsService {
 	private RestTemplate restTemplate;
 	@Autowired
 	private HospitalsAsync async;
+	@Autowired
+	private SaleforceAddAsync addAsync;
 	Logger logger=LoggerFactory.getLogger(getClass());
 
 	/*private Distributor__c c;*/
 
-	//插入
+	/*//插入
 	public Map<String,Object> add(String beginTime,String endTime) {
 		Map<String,Object> map=new HashMap<>();
 		SFCELoginService login=new SFCELoginService();
@@ -49,11 +49,11 @@ public class DistributorsService {
 			.andLessThanOrEqualTo("createon", endTime);
 		}
 		List<Distributors> list=distributorsMapper.selectByExample(example).subList(0, 10);
-		/*try {
+		try {
 			async.addMysqlDistributors(restTemplate,list);
 		}catch(Exception e) {
 			System.out.println("没有灵魂的代码");
-		}*/
+		}
 		logger.debug("从数据库读取到\t"+list.size()+"\t条");
 		List<Distributor__c> csList=new ArrayList<>();
 		Distributor__c c = null;
@@ -71,7 +71,7 @@ public class DistributorsService {
 			}else {
 				c.setNameEN__c("");
 			}
-		
+
 			if(null==list.get(i).getModifyon()) {
 				c.setModifyOn__c(null);
 			}else {
@@ -91,7 +91,7 @@ public class DistributorsService {
 				c.setDistributor_Name_CN__c("");
 			}
 			c.setDistributor_Code__c(list.get(i).getDistributorid());
-		
+
 			if(null==list.get(i).getCreateon()) {
 				c.setCreateOn__c(null);
 			}else {
@@ -208,7 +208,7 @@ public class DistributorsService {
 
 
 		return map;
-	}
+	}*/
 
 
 
@@ -243,5 +243,25 @@ public class DistributorsService {
 		}
 	}
 
+	public Map<String,Object> add(String beginTime,String endTime) {
+		Map<String,Object> map=new HashMap<>();
+
+		Example example=new Example(Distributors.class);
+		if(null!=beginTime&&null!=endTime) {
+			example.createCriteria().andGreaterThanOrEqualTo("modifyon",beginTime)
+			.andLessThanOrEqualTo("modifyon", endTime).orGreaterThanOrEqualTo("createon", beginTime)
+			.andLessThanOrEqualTo("createon", endTime);
+		}
+		List<Distributors> list=distributorsMapper.selectByExample(example);
+		/*try {
+			async.addMysqlDistributors(restTemplate,list);
+		}catch(Exception e) {
+			System.out.println("没有灵魂的代码");
+		}*/
+		addAsync.adddistributors(list, interfaceLogService);
+		map.put("flag", 0);
+		map.put("errorMsg","");
+		return map;
+	}
 
 }
