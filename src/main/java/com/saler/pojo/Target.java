@@ -2,7 +2,6 @@ package com.saler.pojo;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 
 public class Target implements Serializable {
     private Integer id;

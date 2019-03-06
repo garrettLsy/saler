@@ -1,8 +1,6 @@
 package com.saler.util;
  
-import java.security.MessageDigest;
-
-import com.saler.config.PropertiesConfig;  
+import java.security.MessageDigest;  
   
 /** 
  * 采用MD5加密解密 

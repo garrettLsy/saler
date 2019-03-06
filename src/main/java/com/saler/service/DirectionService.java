@@ -1,9 +1,6 @@
 package com.saler.service;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -18,10 +15,6 @@ import com.saler.async.SaleforceAddAsync;
 import com.saler.mapper.DirectionMapper;
 import com.saler.pojo.Direction;
 import com.saler.util.LoggerUtil;
-import com.sforce.soap.enterprise.EnterpriseConnection;
-import com.sforce.soap.enterprise.SaveResult;
-import com.sforce.soap.enterprise.UpsertResult;
-import com.sforce.soap.enterprise.sobject.AMAP_Data__c;
 
 import tk.mybatis.mapper.entity.Example;
 
@@ -35,7 +28,6 @@ public class DirectionService extends LoggerUtil{
 	private HospitalsAsync async;
 	@Autowired
 	private RestTemplate restTemplate;
-	
 	@Autowired
 	private SaleforceAddAsync addAsync;
 
@@ -45,16 +37,13 @@ public class DirectionService extends LoggerUtil{
 		//以当前时间   获取版本号
 		String  timeVersion=formatter.format(new Date());
 		
-		SFCELoginService loginService=new SFCELoginService();
-		//链接salesforce
-		EnterpriseConnection connection=loginService.getconnection();
-		
 		//查询本地数据库
 		Example example=new Example(Direction.class);
 		if(null!=beginTime&&null!=endTime) {
 			example.createCriteria().andGreaterThanOrEqualTo("salesDate",beginTime).andLessThanOrEqualTo("salesDate",endTime);
 		}
 		List<Direction> list=dm.selectByExample(example);
+		//List<Direction> list=dcm.selectByExample();
 		
 		/*try {
 			async.addMysqlDirction(restTemplate, list, timeVersion);

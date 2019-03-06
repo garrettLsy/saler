@@ -26,7 +26,7 @@ public class ScheduledTask {
 	BlocService blocService;
 	//@Scheduled(cron="0 7 10 15 * ?")//每月8日上午10:15触发   cron表达式详解0 0 12 * * ? 
 	//@Scheduled(fixedRate=10800000)
-	@Scheduled(cron="0 0 15 * * ?")
+	/*@Scheduled(cron="0 0 15 * * ?")*/
 	public void test() {
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy");
 		SimpleDateFormat sdf2=new SimpleDateFormat("yyyy-MM-dd");

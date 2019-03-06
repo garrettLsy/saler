@@ -3,7 +3,6 @@ package com.saler.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.saler.config.PropertiesConfig;
 import com.sforce.soap.enterprise.Connector;
 import com.sforce.soap.enterprise.EnterpriseConnection;
 import com.sforce.ws.ConnectionException;

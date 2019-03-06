@@ -40,10 +40,14 @@ public class BlocService {
 		//查询本地数据库
 		Example example=new Example(Bloc.class);
 		if(null!=beginTime&&null!=endTime) {
-			example.createCriteria().andGreaterThanOrEqualTo("modifyon",beginTime)
+			
+			example.createCriteria().andIsNotNull("chain").andGreaterThanOrEqualTo("modifyon",beginTime)
 			.andLessThanOrEqualTo("modifyon",endTime).orGreaterThanOrEqualTo("createon", beginTime)
 			.andLessThanOrEqualTo("createon", endTime);
+		}else {
+			example.createCriteria().andIsNotNull("chain");
 		}
+		//List<Bloc> list=bm.selectByExample(example).subList(268400,362499);
 		List<Bloc> list=bm.selectByExample(example);
 		/*try {
 			async.addMysqlBloc( list);

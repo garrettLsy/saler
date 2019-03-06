@@ -5,10 +5,15 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+
 import com.saler.pojo.Bloc;
 import com.saler.pojo.Direction;
 import com.saler.pojo.Distributors;
@@ -187,6 +192,7 @@ public class SaleforceAddAsync {
 
 	}
 	@Async
+	
 	public void addDirection(List<Direction> list,InterfaceLogService interfaceLogService,	String  timeVersion) {
 		SFCELoginService loginService=new SFCELoginService();
 		//链接salesforce
@@ -195,16 +201,20 @@ public class SaleforceAddAsync {
 		AMAP_Data__c c=null;
 		Calendar calendar=null;
 		for(int i=0;i<list.size();i++) {
+		
 			c=new AMAP_Data__c();
 			c.setVersion__c(timeVersion);
 			c.setType__c("Sales Data");
 			c.setStyle__c(list.get(i).getStyle());
 			c.setSales_Month__c(list.get(i).getMon());
-
+			if(null!=list.get(i).getSalesDate()) {
 			calendar=Calendar.getInstance();
 			calendar.setTime(list.get(i).getSalesDate());
 			calendar.add(Calendar.HOUR_OF_DAY, 12);
 			c.setSales_Date__c(calendar);
+			}else {
+				c.setSales_Date__c(null);
+			}
 			if(null!=list.get(i).getQty()&&list.get(i).getQty()!=0) {
 				c.setQuantity__c((double)list.get(i).getQty());
 			}else {
@@ -254,8 +264,11 @@ public class SaleforceAddAsync {
 			}else {
 				c.setProduct_Code__c("");
 			}
+			
 			clist.add(c);
 		}
+		
+		
 		logger.debug("流向数据表--------------->\t从数据库中取到\t"+list.size()+"\t条");
 		AMAP_Data__c [] adcArray=null;
 		List<AMAP_Data__c> adclist=new ArrayList<>();
@@ -515,7 +528,7 @@ public class SaleforceAddAsync {
 				}
 				c.setType__c(list.get(i).getType());
 				c.setTier__c(list.get(i).getTier());
-				if(list.get(i).equals("NULL")) {
+				if(null!=list.get(i).getTelno()&&!list.get(i).getTelno().equals("NULL")) {
 					c.setTelephone_Number__c("");
 				}else {
 					c.setTelephone_Number__c(list.get(i).getTelno());
@@ -528,7 +541,7 @@ public class SaleforceAddAsync {
 				}else {
 					c.setProvince__c("");
 				}
-				if(list.get(i).getPostalcode().equals(0)) {
+				if(null!=list.get(i).getPostalcode()&&!list.get(i).getPostalcode().equals(0)) {
 					c.setPostCode__c("");
 				}else {
 					c.setPostCode__c(list.get(i).getPostalcode());
@@ -549,10 +562,11 @@ public class SaleforceAddAsync {
 				}else {
 					c.setPharm_Code__c("");
 				}
-				if(null==list.get(i).getNoofbeds()) {
-					c.setNumberOfBeds__c(0.0);
-				}else {
+				if(null!=list.get(i).getNoofbeds()) {
+				
 					c.setNumberOfBeds__c((double)list.get(i).getNoofbeds());
+				}else {
+					c.setNumberOfBeds__c(0.0);
 				}
 				//时间转日历
 
@@ -624,6 +638,7 @@ public class SaleforceAddAsync {
 				errorKeyValue.add(maps);
 				errorPharm_cList_ID.add(list.get(i).getHospitalid());
 				errorCount++;
+				e.printStackTrace();
 				continue;
 			}
 			csList.add(c);
@@ -705,6 +720,7 @@ public class SaleforceAddAsync {
 				"\n失败条数为"+errorCount+"\t条"+"\n失败信息为:"+errorString+"\n失败数据为:\n"+errorKeyValue+"\n版本号为:"+null);
 	}
 	@Async
+	@org.springframework.transaction.annotation.Transactional(propagation=Propagation.REQUIRED)
 	public void addtTarGet(List<Target> list,InterfaceLogService interfaceLogService) {
 		SFCELoginService loginService=new SFCELoginService();
 		//登录saleforce
