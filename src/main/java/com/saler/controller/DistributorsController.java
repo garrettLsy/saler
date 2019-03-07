@@ -44,9 +44,13 @@ public class DistributorsController {
 	public Map<String,Object> getMaps(@RequestBody JSONObject param){
 		logger.debug(param.toJSONString());
 		Map<String,Object> map=new HashMap<>();
+		//开始时间
 		String beginTime=param.getString("beginTime");
+		//结束时间
 		String endTime=param.getString("endTime");
+		//对象
 		String objectType=param.getString("objectType");
+		//md5编码
 		String header=request.getHeader("Authorization");
 		if(header.equals(MD5Util.returnMD5())) {
 			if(objectType.equals("Pharm")) {
@@ -61,6 +65,7 @@ public class DistributorsController {
 				return targetService.save(beginTime, endTime);
 			}
 		}else {
+			//md5匹配不上
 			map.put("flag", 1);
 			map.put("errorMsg", "请求不合法");
 		}

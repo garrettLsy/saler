@@ -152,7 +152,6 @@ public class SaleforceAddAsync {
 							}
 						}    
 					}
-
 					adcArray.clone();
 					adclist.clear();
 					statistics++;

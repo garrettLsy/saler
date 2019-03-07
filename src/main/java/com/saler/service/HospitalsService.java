@@ -41,11 +41,9 @@ public class HospitalsService {
 		Map<String,Object> map=new HashMap<>();
 		Example example=new Example(Hospitals.class);
 		if(null!=beginTime&&null!=endTime) {
-			example.createCriteria().andEqualTo("deleted", 0).andGreaterThanOrEqualTo("modifyon",beginTime)
+			example.createCriteria().andGreaterThanOrEqualTo("modifyon",beginTime)
 			.andLessThanOrEqualTo("modifyon", endTime).orGreaterThanOrEqualTo("createon", beginTime)
 			.andLessThanOrEqualTo("createon", endTime);
-		}else {
-			example.createCriteria().andEqualTo("deleted", 0);
 		}
 		List<Hospitals> list=hm.selectByExample(example);
 		/*try {

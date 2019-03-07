@@ -57,13 +57,13 @@
 			<artifactId>fastjson</artifactId>
 			<version>1.2.47</version>
 		</dependency>
-		
+
 		<!--mysql -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-<!-- 			<version>5.1.29</version>
- -->		</dependency>
+			<!-- <version>5.1.29</version> -->
+		</dependency>
 		<!--sqlserver -->
 		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
@@ -111,14 +111,10 @@
 		</dependency>
 
 
-		<!-- <dependency>
-			<groupId>com.sf</groupId>
-			<artifactId>wst-c</artifactId>
-			<version>1.0</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/src/main/resources/lib/com.sf.jar</systemPath>
-		</dependency> -->
-		
+		<!-- <dependency> <groupId>com.sf</groupId> <artifactId>wst-c</artifactId> 
+			<version>1.0</version> <scope>system</scope> <systemPath>${project.basedir}/src/main/resources/lib/com.sf.jar</systemPath> 
+			</dependency> -->
+
 		<dependency>
 			<groupId>com.sf</groupId>
 			<artifactId>wst-c</artifactId>
@@ -126,6 +122,18 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/src/lib/com.sf.jar</systemPath>
 
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.springframework.retry</groupId>
+			<artifactId>spring-retry</artifactId>
+			<version>1.1.2.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.8.6</version>
 		</dependency>
 
 	</dependencies>
