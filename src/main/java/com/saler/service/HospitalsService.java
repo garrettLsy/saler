@@ -40,7 +40,7 @@ public class HospitalsService {
 	public Map<String,Object> add(String beginTime,String endTime) {
 		Map<String,Object> map=new HashMap<>();
 		Example example=new Example(Hospitals.class);
-		if(null!=beginTime&&null!=endTime) {
+		if(null!=beginTime&&null!=endTime&&!"".equals(beginTime)&&!"".equals(endTime)) {
 			example.createCriteria().andGreaterThanOrEqualTo("modifyon",beginTime)
 			.andLessThanOrEqualTo("modifyon", endTime).orGreaterThanOrEqualTo("createon", beginTime)
 			.andLessThanOrEqualTo("createon", endTime);

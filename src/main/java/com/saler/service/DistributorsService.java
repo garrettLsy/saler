@@ -73,7 +73,7 @@ public class DistributorsService {
 		Map<String,Object> map=new HashMap<>();
 
 		Example example=new Example(Distributors.class);
-		if(null!=beginTime&&null!=endTime) {
+		if(null!=beginTime&&null!=endTime&&!"".equals(beginTime)&&!"".equals(endTime)) {
 			example.createCriteria().andEqualTo("deleted",0).andGreaterThanOrEqualTo("modifyon",beginTime)
 			.andLessThanOrEqualTo("modifyon", endTime).orGreaterThanOrEqualTo("createon", beginTime)
 			.andLessThanOrEqualTo("createon", endTime);

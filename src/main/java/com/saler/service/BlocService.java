@@ -39,7 +39,7 @@ public class BlocService {
 		Map<String,Object> map=new HashMap<>();
 		//查询本地数据库
 		Example example=new Example(Bloc.class);
-		if(null!=beginTime&&null!=endTime) {
+		if(null!=beginTime&&null!=endTime&&!"".equals(beginTime)&&!"".equals(endTime)) {
 			
 			example.createCriteria().andIsNotNull("chain").andGreaterThanOrEqualTo("modifyon",beginTime)
 			.andLessThanOrEqualTo("modifyon",endTime).orGreaterThanOrEqualTo("createon", beginTime)

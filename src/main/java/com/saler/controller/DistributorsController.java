@@ -71,5 +71,10 @@ public class DistributorsController {
 		}
 		return map;
 	} 
+	
+	@RequestMapping(value="/hello",method=RequestMethod.GET)
+	public String demo() {
+		return "hello world";
+	}
 
 }

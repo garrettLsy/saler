@@ -207,7 +207,7 @@ public class SaleforceAddAsync {
 			c.setStyle__c(list.get(i).getStyle());
 			c.setSales_Month__c(list.get(i).getMon());
 			if(null!=list.get(i).getSalesDate()) {
-			calendar=Calendar.getInstance();
+			calendar=Calendar.getInstance();  //卡琳大
 			calendar.setTime(list.get(i).getSalesDate());
 			calendar.add(Calendar.HOUR_OF_DAY, 12);
 			c.setSales_Date__c(calendar);
