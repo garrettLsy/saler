@@ -1,5 +1,6 @@
 package com.saler.service;
 
+import java.sql.SQLDataException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.remoting.RemoteAccessException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -36,39 +40,7 @@ public class DistributorsService {
 	Logger logger=LoggerFactory.getLogger(getClass());
 
 	
-
-
-
-	public void  query() {
-		SFCELoginService loginService=new SFCELoginService();
-		EnterpriseConnection connection=loginService.getconnection();
-		QueryResult queryResults;
-		try {
-			queryResults = connection.query("SELECT Id, LastActivityDate, CityID__c, "
-					+ "NameEN__c, Comments__c, ProvinceID__c, City__c, Is_Deleted__c, Province__c, "
-					+ "ModifyOn__c, ModifyBy__c, CreateBy__c,"
-					+ " CreateOn__c, Distributor_Name_CN__c FROM Distributor__c");
-
-			if (queryResults.getSize() > 0) {
-
-				for (int i=0;i<queryResults.getRecords().length;i++) {
-					Distributor__c c = (Distributor__c)queryResults.getRecords()[i];
-					logger.debug("Id: " + c.getNameEN__c() + " - Name: "+c.getCreateOn__c()+" "+
-							c.getComments__c()+" - Account: "+c.getName()+"\tit__C"+c.getDistributor_Name_CN__c());
-
-				}
-			}else {
-				System.out.println("adsaf");
-			}
-		} catch (ConnectionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally {
-			//退出
-			loginService.closeSFCE(connection);
-		}
-	}
-
+	@Retryable(value= {Exception.class},maxAttempts=5,	backoff = @Backoff(delay = 5000,multiplier = 2))
 	public Map<String,Object> add(String beginTime,String endTime) {
 		Map<String,Object> map=new HashMap<>();
 

@@ -6,13 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.transaction.Transactional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.saler.pojo.Bloc;
 import com.saler.pojo.Direction;
@@ -40,8 +39,8 @@ public class SaleforceAddAsync {
 	 * @param list 集团医院关系数据集合
 	 * @param interfaceLogService  
 	 */
-	@SuppressWarnings("unlikely-arg-type")
 	@Async
+	@Transactional(propagation=Propagation.REQUIRES_NEW)  // 重启开启事物，如果存在事物，就停止当前事物
 	public void addBloc(List<Bloc> list,InterfaceLogService interfaceLogService) {
 		SFCELoginService loginService=new SFCELoginService();
 		//链接salesforc
@@ -191,7 +190,7 @@ public class SaleforceAddAsync {
 
 	}
 	@Async
-	
+	@Transactional(propagation=Propagation.REQUIRES_NEW)  // 重启开启事物，如果存在事物，就停止当前事物
 	public void addDirection(List<Direction> list,InterfaceLogService interfaceLogService,	String  timeVersion) {
 		SFCELoginService loginService=new SFCELoginService();
 		//链接salesforce
@@ -347,6 +346,7 @@ public class SaleforceAddAsync {
 	}
 
 	@Async
+	@Transactional(propagation=Propagation.REQUIRES_NEW)  // 重启开启事物，如果存在事物，就停止当前事物
 	public void adddistributors(List<Distributors> list,InterfaceLogService interfaceLogService) {
 		SFCELoginService login=new SFCELoginService();
 		EnterpriseConnection connection=login.getconnection();
@@ -500,6 +500,7 @@ public class SaleforceAddAsync {
 	}
 
 	@Async
+	@Transactional(propagation=Propagation.REQUIRES_NEW)  // 重启开启事物，如果存在事物，就停止当前事物
 	public void addHospitals(List<Hospitals> list,InterfaceLogService interfaceLogService) {
 		SFCELoginService login=new SFCELoginService();
 		EnterpriseConnection connection=login.getconnection();
@@ -719,7 +720,7 @@ public class SaleforceAddAsync {
 				"\n失败条数为"+errorCount+"\t条"+"\n失败信息为:"+errorString+"\n失败数据为:\n"+errorKeyValue+"\n版本号为:"+null);
 	}
 	@Async
-	@org.springframework.transaction.annotation.Transactional(propagation=Propagation.REQUIRED)
+	@Transactional(propagation=Propagation.REQUIRES_NEW)  // 重启开启事物，如果存在事物，就停止当前事物
 	public void addtTarGet(List<Target> list,InterfaceLogService interfaceLogService) {
 		SFCELoginService loginService=new SFCELoginService();
 		//登录saleforce

@@ -1,5 +1,6 @@
 package com.saler.service;
 
+import java.sql.SQLDataException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.remoting.RemoteAccessException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -34,7 +38,7 @@ public class BlocService {
 	Logger logger=LoggerFactory.getLogger(getClass());
 
 	
-
+	@Retryable(value= {Exception.class},maxAttempts=5,	backoff = @Backoff(delay = 5000,multiplier = 2))
 	public Map<String,Object> add(String beginTime,String endTime) {
 		Map<String,Object> map=new HashMap<>();
 		//查询本地数据库

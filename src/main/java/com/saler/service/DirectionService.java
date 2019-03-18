@@ -1,5 +1,6 @@
 package com.saler.service;
 
+import java.sql.SQLDataException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -7,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.remoting.RemoteAccessException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -30,7 +34,7 @@ public class DirectionService extends LoggerUtil{
 	private RestTemplate restTemplate;
 	@Autowired
 	private SaleforceAddAsync addAsync;
-
+	@Retryable(value= {Exception.class},maxAttempts=5,	backoff = @Backoff(delay = 5000,multiplier = 2))
 	public Map<String,Object> add(String beginTime,String endTime) {
 		Map<String,Object> map=new HashMap<>();
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
