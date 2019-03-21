@@ -43,7 +43,9 @@ public class DirectionService extends LoggerUtil{
 		
 		//查询本地数据库
 		Example example=new Example(Direction.class);
+		example.setOrderByClause("amap_id ASC");
 		if(null!=beginTime&&null!=endTime&&!"".equals(beginTime)&&!"".equals(endTime)) {
+			
 			example.createCriteria().andGreaterThanOrEqualTo("salesDate",beginTime).andLessThanOrEqualTo("salesDate",endTime);
 		}
 		List<Direction> list=dm.selectByExample(example);

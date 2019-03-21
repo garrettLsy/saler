@@ -8,20 +8,21 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSONObject;
 import com.saler.service.BlocService;
 import com.saler.service.DirectionService;
 import com.saler.service.DistributorsService;
 import com.saler.service.HospitalsService;
+import com.saler.service.InstitutionAgnmappingService;
 import com.saler.service.TargetService;
 import com.saler.util.MD5Util;
 
-@RestController
+@Controller
 @RequestMapping("/sale")
 public class DistributorsController {
 
@@ -40,18 +41,23 @@ public class DistributorsController {
 	private HospitalsService hospitalsService;
 	@Autowired
 	private TargetService targetService;
+	@Autowired
+	private InstitutionAgnmappingService mappingService;
+	
 	@RequestMapping(value="/add",method=RequestMethod.POST)
-	public Map<String,Object> getMaps(@RequestBody JSONObject param){
-		logger.debug(param.toJSONString());
+	@ResponseBody
+	public Map<String,Object> getMaps(String objectType,String beginTime,String endTime){
+		logger.debug("开始时间:\t"+beginTime+"\t结束时间:\t"+endTime+"\t对象:\t"+objectType);
 		Map<String,Object> map=new HashMap<>();
 		//开始时间
-		String beginTime=param.getString("beginTime");
+		/*	String beginTime=(String) param.get("beginTime");
 		//结束时间
-		String endTime=param.getString("endTime");
+		String endTime=(String) param.get("endTime");
 		//对象
-		String objectType=param.getString("objectType");
+		String objectType=(String) param.get("objectType");*/
 		//md5编码
 		String header=request.getHeader("Authorization");
+		header="12220d1e4548f9ce775c023cbf4a82a8";
 		if(header.equals(MD5Util.returnMD5())) {
 			if(objectType.equals("Pharm")) {
 				return hospitalsService.add(beginTime, endTime);
@@ -63,6 +69,8 @@ public class DistributorsController {
 				return blocService.add(beginTime, endTime);
 			}else if(objectType.equals("Target")) {
 				return targetService.save(beginTime, endTime);
+			}else if(objectType.equals("InstitutionAgnmapping")) {
+				return mappingService.add(beginTime, endTime);
 			}
 		}else {
 			//md5匹配不上
@@ -73,8 +81,9 @@ public class DistributorsController {
 	} 
 	
 	@RequestMapping(value="/hello",method=RequestMethod.GET)
-	public String demo() {
-		return "hello world";
+	public String demo(Model model) {
+		model.addAttribute("name", "小米");
+		return "demo";
 	}
 
 }

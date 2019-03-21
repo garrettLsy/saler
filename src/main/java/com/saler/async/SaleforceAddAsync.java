@@ -17,6 +17,7 @@ import com.saler.pojo.Bloc;
 import com.saler.pojo.Direction;
 import com.saler.pojo.Distributors;
 import com.saler.pojo.Hospitals;
+import com.saler.pojo.InstitutionAgnmapping;
 import com.saler.pojo.Target;
 import com.saler.service.InterfaceLogService;
 import com.saler.service.SFCELoginService;
@@ -28,7 +29,10 @@ import com.sforce.soap.enterprise.sobject.AMAP_Data__c;
 import com.sforce.soap.enterprise.sobject.Distributor__c;
 import com.sforce.soap.enterprise.sobject.Pharm__c;
 import com.sforce.soap.enterprise.sobject.SARA_Target_Hospital__c;
+import com.sforce.soap.enterprise.sobject.SARA_TempCode_Mapping__c;
+import com.sforce.soap.enterprise.sobject.SARA_Territory_Management__c;
 import com.sforce.ws.ConnectionException;
+import com.sforce.ws.bind.CalendarCodec;
 @Component
 public class SaleforceAddAsync {
 
@@ -199,17 +203,17 @@ public class SaleforceAddAsync {
 		AMAP_Data__c c=null;
 		Calendar calendar=null;
 		for(int i=0;i<list.size();i++) {
-		
+
 			c=new AMAP_Data__c();
 			c.setVersion__c(timeVersion);
 			c.setType__c("Sales Data");
 			c.setStyle__c(list.get(i).getStyle());
 			c.setSales_Month__c(list.get(i).getMon());
 			if(null!=list.get(i).getSalesDate()) {
-			calendar=Calendar.getInstance();  //卡琳大
-			calendar.setTime(list.get(i).getSalesDate());
-			calendar.add(Calendar.HOUR_OF_DAY, 12);
-			c.setSales_Date__c(calendar);
+				calendar=Calendar.getInstance();  //卡琳大
+				calendar.setTime(list.get(i).getSalesDate());
+				calendar.add(Calendar.HOUR_OF_DAY, 12);
+				c.setSales_Date__c(calendar);
 			}else {
 				c.setSales_Date__c(null);
 			}
@@ -262,11 +266,11 @@ public class SaleforceAddAsync {
 			}else {
 				c.setProduct_Code__c("");
 			}
-			
+
 			clist.add(c);
 		}
-		
-		
+
+
 		logger.debug("流向数据表--------------->\t从数据库中取到\t"+list.size()+"\t条");
 		AMAP_Data__c [] adcArray=null;
 		List<AMAP_Data__c> adclist=new ArrayList<>();
@@ -563,7 +567,7 @@ public class SaleforceAddAsync {
 					c.setPharm_Code__c("");
 				}
 				if(null!=list.get(i).getNoofbeds()) {
-				
+
 					c.setNumberOfBeds__c((double)list.get(i).getNoofbeds());
 				}else {
 					c.setNumberOfBeds__c(0.0);
@@ -729,7 +733,7 @@ public class SaleforceAddAsync {
 		List<String> errorIdList=new ArrayList<>();
 		//失败条数统计
 		int errorCount=0;
-		
+
 		List<SARA_Target_Hospital__c> listArray=new ArrayList<>();
 		SARA_Target_Hospital__c c=null;
 		Calendar calendar=null;
@@ -847,4 +851,117 @@ public class SaleforceAddAsync {
 		}
 
 	} 
+
+	@Async
+	@Transactional(propagation=Propagation.REQUIRES_NEW)  // 重启开启事物，如果存在事物，就停止当前事物
+	public void addInstitutionAgnmapping(List<InstitutionAgnmapping> list,InterfaceLogService interfaceLogService) {
+		SFCELoginService loginService=new SFCELoginService();
+		//登录saleforce
+		EnterpriseConnection connection=loginService.getconnection();
+		
+		//失败条数统计
+		int errorCount=0;
+
+		List<SARA_TempCode_Mapping__c> saraList=new ArrayList<>();
+		SARA_TempCode_Mapping__c saratm=null;
+		Calendar calendar=null;
+		for(int i=0,a=list.size();i<a;i++) {
+			saratm=new SARA_TempCode_Mapping__c();
+			saratm.setPrimaryKey__c(list.get(i).getId());
+			saratm.setPharm_Code__c(list.get(i).getNewcode());
+			saratm.setPharm_Code_Temp__c(list.get(i).getFormercode());
+			if(null!=list.get(i).getCreateon()) {
+				calendar=Calendar.getInstance();
+				calendar.setTime(list.get(i).getCreateon());
+				calendar.add(Calendar.HOUR_OF_DAY, 12);
+				saratm.setCreateOn__c(calendar);
+			}else {
+				saratm.setCreateOn__c(null);
+			}
+
+			if(null!=list.get(i).getModifyon()) {
+				calendar=Calendar.getInstance();
+				calendar.setTime(list.get(i).getModifyon());
+				calendar.add(Calendar.HOUR_OF_DAY, 12);
+				saratm.setModifyOn__c(calendar);
+			}else {
+				saratm.setModifyOn__c(null);
+			}
+			saraList.add(saratm);
+		}
+
+		List<SARA_TempCode_Mapping__c> recordList=new ArrayList<>();
+		SARA_TempCode_Mapping__c [] saraArray=null;
+		//统计每次198插入多少次
+		int count=saraList.size()/198;
+		//统计每次198插入过后，余数
+		int remainder=saraList.size()%198;
+		//统计
+		int statistics=0;
+		//成功条数
+		int successCount=0;
+		//记录失败原Id
+		List<String> errorListId=new ArrayList<>();
+		//记录失败原因 
+		List<String> errorListMsg=new ArrayList<>();
+		try {
+			for(int i=0;i<saraList.size();i++) {
+				recordList.add(saraList.get(i));
+				if(recordList.size()>=198) {
+					//转换为数组格式
+					saraArray=recordList.toArray(new SARA_TempCode_Mapping__c[recordList.size()]);
+					UpsertResult[] results=connection.upsert("PrimaryKey__c", saraArray);
+					for (int v=0; v< results.length; v++) {
+						if (results[v].isSuccess()) {
+							logger.debug(v+". Successfully created record - Id: " + results[v].getId());
+							successCount++;
+						} else {
+							com.sforce.soap.enterprise.Error[] errors = results[v].getErrors();
+							for (int j=0; j< errors.length; j++) {
+								logger.warn("第"+v+"条"+"ERROR creating record: " + errors[j].getMessage());
+								errorListId.add(saraArray[v].getPrimaryKey__c());
+								errorListMsg.add(errors[j].getMessage());
+								errorCount++;
+							}
+						}    
+					}
+					saraArray.clone();
+					recordList.clear();
+					statistics++;
+				}else if(remainder==recordList.size()&&count==statistics) {
+					//转换为数组格式
+					saraArray=recordList.toArray(new SARA_TempCode_Mapping__c[recordList.size()]);
+					//插入
+					UpsertResult[] results=connection.upsert("PrimaryKey__c", saraArray);
+					for (int v=0; v< results.length; v++) {
+						if (results[v].isSuccess()) {
+							logger.debug(v+". Successfully created record - Id: " + results[v].getId());
+							successCount++;
+						} else {
+							com.sforce.soap.enterprise.Error[] errors = results[v].getErrors();
+							for (int j=0; j< errors.length; j++) {
+								logger.warn("第"+v+"条"+"ERROR creating record: " + errors[j].getClass());
+								errorListId.add(saraArray[v].getPrimaryKey__c());
+								errorListMsg.add(errors[j].getMessage());
+								errorCount++;
+							}
+						}    
+					}
+
+					saraArray.clone();
+					recordList.clear();
+				}
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			loginService.closeSFCE(connection);
+		}
+
+		logger.debug("此次医院数据表<Pharm__c>导入成功条数为\t"+successCount+"\t条"+
+				"\n失败条数为"+errorCount+"\t条"+"\n失败信息为:"+errorListMsg+"\n失败数据id为:\n"+errorListId+"\n版本号为:"+null);
+
+	}
+
+
 }

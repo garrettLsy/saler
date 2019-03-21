@@ -13,6 +13,8 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<pagehelper.version>1.2.1</pagehelper.version>
+		
+
 	</properties>
 	<!--引入sringboot父类依赖 -->
 	<parent>
@@ -124,7 +126,7 @@
 
 		</dependency>
 
-
+		<!--引用spring Retry框架 begin -->
 		<dependency>
 			<groupId>org.springframework.retry</groupId>
 			<artifactId>spring-retry</artifactId>
@@ -135,7 +137,12 @@
 			<artifactId>aspectjweaver</artifactId>
 			<version>1.8.6</version>
 		</dependency>
-
+		<!-- end -->
+		<!--引用 thymeleaf -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
 	</dependencies>
 
 

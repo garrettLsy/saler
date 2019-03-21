@@ -61,7 +61,7 @@
 		<!-- 	<table tableName="direction"></table>
 			<table tableName="distributors"></table> -->
 	<!-- <table tableName="bloc"></table>  -->
-	 		<table tableName="target"></table> 
+	 		<table tableName="Institution_AGNMapping"></table> 
 	 		<!-- <table tableName="distributors"></table>   -->
 	</context>
 </generatorConfiguration>

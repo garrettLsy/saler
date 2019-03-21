@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.saler.mapper.InstitutionAgnmappingMapper">
+  <resultMap id="BaseResultMap" type="com.saler.pojo.InstitutionAgnmapping">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="NEWCODE" jdbcType="NVARCHAR" property="newcode" />
+    <result column="FORMERCODE" jdbcType="NVARCHAR" property="formercode" />
+    <result column="MODIFYON" jdbcType="TIMESTAMP" property="modifyon" />
+    <result column="CREATEON" jdbcType="TIMESTAMP" property="createon" />
+  </resultMap>
+</mapper>
