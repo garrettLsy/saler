@@ -19,8 +19,10 @@ import com.saler.service.DirectionService;
 import com.saler.service.DistributorsService;
 import com.saler.service.HospitalsService;
 import com.saler.service.InstitutionAgnmappingService;
+import com.saler.service.TXTInputService;
 import com.saler.service.TargetService;
 import com.saler.util.MD5Util;
+import com.sforce.ws.ConnectionException;
 
 @Controller
 @RequestMapping("/sale")
@@ -43,10 +45,11 @@ public class DistributorsController {
 	private TargetService targetService;
 	@Autowired
 	private InstitutionAgnmappingService mappingService;
-	
+	@Autowired
+	private TXTInputService txt;
 	@RequestMapping(value="/add",method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> getMaps(String objectType,String beginTime,String endTime){
+	public Map<String,Object> getMaps(String objectType,String beginTime,String endTime) throws ConnectionException{
 		logger.debug("开始时间:\t"+beginTime+"\t结束时间:\t"+endTime+"\t对象:\t"+objectType);
 		Map<String,Object> map=new HashMap<>();
 		//开始时间
@@ -82,7 +85,7 @@ public class DistributorsController {
 	
 	@RequestMapping(value="/hello",method=RequestMethod.GET)
 	public String demo(Model model) {
-		model.addAttribute("name", "小米");
+		model.addAttribute("list", txt.logTXTList());
 		return "demo";
 	}
 

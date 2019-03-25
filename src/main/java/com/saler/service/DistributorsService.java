@@ -1,6 +1,8 @@
 package com.saler.service;
 
 import java.sql.SQLDataException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.saler.async.HospitalsAsync;
 import com.saler.async.SaleforceAddAsync;
+import com.saler.config.ReadTxtConfig;
 import com.saler.mapper.DistributorsMapper;
 import com.saler.pojo.Distributors;
 import com.sforce.soap.enterprise.EnterpriseConnection;
@@ -40,10 +43,10 @@ public class DistributorsService {
 	Logger logger=LoggerFactory.getLogger(getClass());
 
 	
-	@Retryable(value= {Exception.class},maxAttempts=5,	backoff = @Backoff(delay = 5000,multiplier = 2))
-	public Map<String,Object> add(String beginTime,String endTime) {
+	public Map<String,Object> add(String beginTime,String endTime) throws ConnectionException {
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+		String toLeadDate=sdf.format(new Date());
 		Map<String,Object> map=new HashMap<>();
-
 		Example example=new Example(Distributors.class);
 		if(null!=beginTime&&null!=endTime&&!"".equals(beginTime)&&!"".equals(endTime)) {
 			example.createCriteria().andEqualTo("deleted",0).andGreaterThanOrEqualTo("modifyon",beginTime)
@@ -61,6 +64,7 @@ public class DistributorsService {
 		addAsync.adddistributors(list, interfaceLogService);
 		map.put("flag", 0);
 		map.put("errorMsg","");
+		ReadTxtConfig.inputTxt("经销商数据正在导入中。。。。。。"+"\t\t导入时间为:"+toLeadDate);
 		return map;
 	}
 

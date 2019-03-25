@@ -1,21 +1,16 @@
 package com.saler.saler;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.saler.config.AESConfig;
 import com.saler.service.BlocService;
 import com.saler.service.DirectionService;
 import com.saler.service.DistributorsService;
 import com.saler.service.HospitalsService;
 import com.saler.service.TargetService;
-import com.saler.util.MD5Util;
 
 
 
@@ -61,6 +56,10 @@ public class SalerApplicationTests {
 		hs.add(null, null);
 		dn.add(null,null);*/
 	/*	ts.save(null,null);*/
+		/*SimpleDateFormat sdf=new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+		ReadTxtConfig config=new ReadTxtConfig();
+		config.inputTxt(sdf.format(new Date())+"");
+		config.outTxt();*/
 	}
 
 

@@ -13,6 +13,11 @@
     var objectType= document.getElementById("objectType").value;
      var beginTime= document.getElementById("beginTime").value;
      var endTime= document.getElementById("endTime").value; 
+    // alert(objectType)
+     if (objectType ==''||objectType==null||objectType=='head') {
+    	 alert('请选择导入对象');
+    	 return false;
+     } 
      if (objectType =='SalesData') {
     	 if(beginTime==''||beginTime==null||endTime==''||endTime==null){
     	 		alert('请填写完整开始结束时间');
@@ -32,6 +37,7 @@
          
      } 
     
+    
 	 }
 </script>
 <body>
@@ -39,28 +45,32 @@
 			<table style="width: 60%; height: 40%; align-content: center; float: center;">
 			
 				<tr>
-					<td colspan="2"><span style="text-align:center;">SARA数据导入</span></td>
+					<td colspan="2">
+						<ul>
+							<li>提示：在《TARGET表》与《流向数据》中需选择时间段操作</li>
+						</ul>
+					</td>
 					
 				</tr>
 				<tr>
-					<td>开始时间:</td>
-					<td><input name="beginTime" id="beginTime" type="date"></td>
+					<td  colspan="2">开始时间:<input  name="beginTime" id="beginTime" type="date"></td>
+					<!-- <td></td> -->
 				</tr>
 				<tr>
-					<td>结束时间:</td>
-					<td><input name="endTime" id="endTime" type="date"></td>
+					<td colspan="2" >结束时间:<input name="endTime" id="endTime" type="date"></td>
+					<!-- <td style="float: left;"></td> -->
 				</tr>
 				<tr>
-					<td>对象:</td>
-					<td>
+					<td  colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对象:<!-- </td>
+					<td> -->
 						<select id="objectType" name="objectType">
-						<option disabled="disabled" selected="selected"  >请选择对象</option>
+						<option disabled="disabled" selected="selected" value="head">请选择对象</option>
 							<option value="SalesData">流向数据</option>
 							<option value="Pharm">医院表</option>
 							<option value="Distributor">经销商表</option>
 							<option value="Group">医院集团关系表</option>
 							<option value="InstitutionAgnmapping">医院Mapping表</option>
-							<option value="Target">target表</option>
+							<option value="Target">TARGET表</option>
 						</select>
 						<!-- <input type="radio" name="objectType" id="SalesData" value="SalesData">流向数据 
 						<input type="radio" name="objectType" id="Pharm" value="Pharm">医院表
@@ -76,7 +86,13 @@
 						<button type="submit" value="导入" onclick="return btnAction()">导入</button>
 					</td>
 				</tr>
+				
+					<tr th:each="log: ${list}">
+					<td th:text="${log}"></td>
+					
+				</tr>
 			</table>
+	
 	
 	</form>
 

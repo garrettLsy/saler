@@ -11,6 +11,7 @@ import com.saler.service.BlocService;
 import com.saler.service.DirectionService;
 import com.saler.service.DistributorsService;
 import com.saler.service.HospitalsService;
+import com.sforce.ws.ConnectionException;
 
 @Component
 public class ScheduledTask {
@@ -30,10 +31,16 @@ public class ScheduledTask {
 	public void test() {
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy");
 		SimpleDateFormat sdf2=new SimpleDateFormat("yyyy-MM-dd");
-		hospitalsService.add(sdf.format(new Date())+"-01-01",sdf2.format(new Date()));
-		directionService.add(sdf.format(new Date())+"-01-01",sdf2.format(new Date()));
-		distributorsService.add(sdf.format(new Date())+"-01-01",sdf2.format(new Date()));
-		blocService.add(sdf.format(new Date())+"-01-01",sdf2.format(new Date()));
+		try {
+			hospitalsService.add(sdf.format(new Date())+"-01-01",sdf2.format(new Date()));
+			directionService.add(sdf.format(new Date())+"-01-01",sdf2.format(new Date()));
+			distributorsService.add(sdf.format(new Date())+"-01-01",sdf2.format(new Date()));
+			blocService.add(sdf.format(new Date())+"-01-01",sdf2.format(new Date()));
+		} catch (ConnectionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		
 	}
 }

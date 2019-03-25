@@ -1,18 +1,24 @@
 package com.saler.async;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.saler.config.ReadTxtConfig;
 import com.saler.pojo.Bloc;
 import com.saler.pojo.Direction;
 import com.saler.pojo.Distributors;
@@ -30,22 +36,25 @@ import com.sforce.soap.enterprise.sobject.Distributor__c;
 import com.sforce.soap.enterprise.sobject.Pharm__c;
 import com.sforce.soap.enterprise.sobject.SARA_Target_Hospital__c;
 import com.sforce.soap.enterprise.sobject.SARA_TempCode_Mapping__c;
-import com.sforce.soap.enterprise.sobject.SARA_Territory_Management__c;
 import com.sforce.ws.ConnectionException;
-import com.sforce.ws.bind.CalendarCodec;
 @Component
 public class SaleforceAddAsync {
 
 	Logger logger=LoggerFactory.getLogger(getClass());
 
 	/***
-	 * 
+	 * 医院集团表
 	 * @param list 集团医院关系数据集合
 	 * @param interfaceLogService  
+	 * @throws ConnectionException 
 	 */
 	@Async
 	@Transactional(propagation=Propagation.REQUIRES_NEW)  // 重启开启事物，如果存在事物，就停止当前事物
-	public void addBloc(List<Bloc> list,InterfaceLogService interfaceLogService) {
+	//spring retry 重试 
+	@Retryable(value= {Exception.class,ConnectionException.class },maxAttempts=5,
+	backoff = @Backoff(delay = 5000,multiplier = 2))
+	public void addBloc(List<Bloc> list,InterfaceLogService interfaceLogService) throws ConnectionException {
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
 		SFCELoginService loginService=new SFCELoginService();
 		//链接salesforc
 		EnterpriseConnection connection=loginService.getconnection();
@@ -140,7 +149,6 @@ public class SaleforceAddAsync {
 					adcArray=adclist.toArray(new AMAP_Data__c[adclist.size()]);
 
 					UpsertResult[] results=connection.upsert("PrimaryKey4Group__c", adcArray);
-					//SaveResult[] results=connection.create(adcArray);
 					for (int v=0; v< results.length; v++) {
 						if (results[v].isSuccess()) {
 							logger.debug(v+". Successfully created record - Id: " + results[v].getId());
@@ -180,9 +188,9 @@ public class SaleforceAddAsync {
 					adclist.clear();
 				}
 			}
-		}catch(Exception e) {
+		}/*catch(Exception e) {
 			e.printStackTrace();
-		}finally {
+		}*/finally {
 			loginService.closeSFCE(connection);
 		}
 		//将错误信息插入 错误信息收集表
@@ -192,10 +200,23 @@ public class SaleforceAddAsync {
 		logger.debug("此次流向数据表<AMAP_Data__c>导入成功条数为\t"+successCount+"\t条"+
 				"\n失败条数为"+errorCount+"\t条"+"\n失败信息为:"+errorListMsg+"\n失败数据为:\n"+errorListID);
 
+		ReadTxtConfig.inputTxt("导入对象：医院集团关系表\t\t导入成功条数:"+successCount+"\t条"+
+				"失败条数为"+errorCount+"条\t"+"\t结束时间:"+sdf.format(new Date()));
+		ReadTxtConfig.inputTxt("医院集团关系表数据导入结束\n\n");
 	}
+	/**
+	 * 流向数据表
+	 * @param list
+	 * @param interfaceLogService
+	 * @param timeVersion
+	 * @throws ConnectionException
+	 */
 	@Async
 	@Transactional(propagation=Propagation.REQUIRES_NEW)  // 重启开启事物，如果存在事物，就停止当前事物
-	public void addDirection(List<Direction> list,InterfaceLogService interfaceLogService,	String  timeVersion) {
+	@Retryable(value= {Exception.class,ConnectionException.class },maxAttempts=5,
+	backoff = @Backoff(delay = 5000,multiplier = 2))
+	public void addDirection(List<Direction> list,InterfaceLogService interfaceLogService,	String  timeVersion) throws ConnectionException {
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
 		SFCELoginService loginService=new SFCELoginService();
 		//链接salesforce
 		EnterpriseConnection connection=loginService.getconnection();
@@ -336,9 +357,9 @@ public class SaleforceAddAsync {
 					adclist.clear();
 				}
 			}
-		}catch(Exception e) {
+		}/*catch(Exception e) {
 			e.printStackTrace();
-		}finally {
+		}*/finally {
 			loginService.closeSFCE(connection);
 		}
 		//将错误信息插入 错误信息收集表
@@ -347,11 +368,24 @@ public class SaleforceAddAsync {
 		}
 		logger.debug("此次流向数据表<AMAP_Data__c>导入成功条数为\t"+successCount+"\t条"+
 				"\n失败条数为"+errorCount+"\t条"+"\n失败信息为:"+errorListMsg+"\n失败数据为:\n"+errorListId+"\n版本号为:"+timeVersion);
+		//客户日志记录
+		ReadTxtConfig.inputTxt("导入对象：流向数据\t\t导入成功条数:"+successCount+"\t条"+"\t\t失败条数为"+errorCount+"条\t"+"\t结束时间:"+sdf.format(new Date())+"\t\t版本号:"+timeVersion);
+		ReadTxtConfig.inputTxt("流向数据数据导入结束\n\n");
 	}
 
+	/***
+	 * 经销商
+	 * @param list
+	 * @param interfaceLogService
+	 * @throws ConnectionException
+	 */
 	@Async
 	@Transactional(propagation=Propagation.REQUIRES_NEW)  // 重启开启事物，如果存在事物，就停止当前事物
-	public void adddistributors(List<Distributors> list,InterfaceLogService interfaceLogService) {
+	@Retryable(value= {Exception.class,ConnectionException.class },maxAttempts=5,
+	backoff = @Backoff(delay = 5000,multiplier = 2))
+	public void adddistributors(List<Distributors> list,InterfaceLogService interfaceLogService) throws ConnectionException {
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
 		SFCELoginService login=new SFCELoginService();
 		EnterpriseConnection connection=login.getconnection();
 		List<Distributor__c> csList=new ArrayList<>();
@@ -488,9 +522,9 @@ public class SaleforceAddAsync {
 				}
 
 			}
-		}catch(Exception ce) {
+		}/*catch(Exception ce) {
 			ce.printStackTrace();
-		}finally {
+		}*/finally {
 			login.closeSFCE(connection);
 		}
 		//将错误信息插入 错误信息收集表
@@ -500,15 +534,26 @@ public class SaleforceAddAsync {
 
 		logger.debug("此次銷售商表<Distributor__c>导入成功条数为\t"+successCount+"\t条"+
 				"\n失败条数为"+errorCount+"\t条"+"\n失败信息为:"+errorListMsg+"\n失败数据为:\n"+errorListId+"\n版本号为:"+null);
-
+		//客户日志记录
+		ReadTxtConfig.inputTxt("导入对象：经销商表\t\t导入成功条数:"+successCount+"\t条"+
+				"失败条数为"+errorCount+"条\t"+"\t结束时间:"+sdf.format(new Date()));
+		ReadTxtConfig.inputTxt("经销商表数据导入结束\n\n");
 	}
 
+	/***
+	 * 医院
+	 * @param list
+	 * @param interfaceLogService
+	 * @throws ConnectionException
+	 */
 	@Async
 	@Transactional(propagation=Propagation.REQUIRES_NEW)  // 重启开启事物，如果存在事物，就停止当前事物
-	public void addHospitals(List<Hospitals> list,InterfaceLogService interfaceLogService) {
+	@Retryable(value= {Exception.class,ConnectionException.class },maxAttempts=5,
+	backoff = @Backoff(delay = 5000,multiplier = 2))
+	public void addHospitals(List<Hospitals> list,InterfaceLogService interfaceLogService) throws ConnectionException {
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		SFCELoginService login=new SFCELoginService();
 		EnterpriseConnection connection=login.getconnection();
-
 		//记录失败数据  id:value
 		List<Map<String,Object>> errorKeyValue=new ArrayList<>();
 		//记录失败原因
@@ -517,7 +562,7 @@ public class SaleforceAddAsync {
 		int errorCount=0;
 		//错误数据id
 		List<String> errorPharm_cList_ID=new ArrayList<>();
-
+		//connection.delete
 
 		List<Pharm__c> csList=new ArrayList<>();
 		Pharm__c c = null;
@@ -573,7 +618,6 @@ public class SaleforceAddAsync {
 					c.setNumberOfBeds__c(0.0);
 				}
 				//时间转日历
-
 				if(null==list.get(i).getModifyon()) {
 					c.setModifyOn__c(null);
 
@@ -663,9 +707,11 @@ public class SaleforceAddAsync {
 		List<String> errorPharm_cMessage=new ArrayList<>();//错误数据内容
 		//List<Hospitals> HospitalsList=new ArrayList<>();
 		Pharm__c [] cs=null;
+
 		try {
 			for(int i=0;i<csList.size();i++) {
 				cs2.add(csList.get(i));
+
 				if(cs2.size()>=198) {
 					cs=cs2.toArray(new Pharm__c[cs2.size()] );
 
@@ -707,25 +753,36 @@ public class SaleforceAddAsync {
 					cs2.clear();
 					cs.clone();
 				}
-
 			}
-		}catch(ConnectionException ce) {
+		}/*catch(ConnectionException ce) {
 			ce.printStackTrace();
-		}finally {
+		}*/finally {
 			login.closeSFCE(connection);
 		}
 		//将错误信息插入 错误信息收集表
 		if(0<errorCount) {
 			interfaceLogService.addInterfaceLog(errorPharm_cList_ID, errorPharm_cMessage, "Pharm");
 		}
-
-
 		logger.debug("此次医院数据表<Pharm__c>导入成功条数为\t"+successCount+"\t条"+
 				"\n失败条数为"+errorCount+"\t条"+"\n失败信息为:"+errorString+"\n失败数据为:\n"+errorKeyValue+"\n版本号为:"+null);
+		//客户日志记录
+		ReadTxtConfig.inputTxt("导入对象：医院表\t\t导入成功条数:"+successCount+"\t条"+
+				"失败条数为"+errorCount+"条\t"+"\t结束时间:"+sdf.format(new Date()));
+		ReadTxtConfig.inputTxt("医院表数据导入结束\n\n");
+
 	}
+	/**
+	 * TARGET表
+	 * @param list
+	 * @param interfaceLogService
+	 * @throws ConnectionException
+	 */
 	@Async
 	@Transactional(propagation=Propagation.REQUIRES_NEW)  // 重启开启事物，如果存在事物，就停止当前事物
-	public void addtTarGet(List<Target> list,InterfaceLogService interfaceLogService) {
+	@Retryable(value= {Exception.class,ConnectionException.class },maxAttempts=5,
+	backoff = @Backoff(delay = 5000,multiplier = 2))
+	public void addtTarGet(List<Target> list,InterfaceLogService interfaceLogService) throws ConnectionException {
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
 		SFCELoginService loginService=new SFCELoginService();
 		//登录saleforce
 		EnterpriseConnection connection=loginService.getconnection();
@@ -838,30 +895,41 @@ public class SaleforceAddAsync {
 				}
 
 			}
-		}catch(ConnectionException e) {
+		}/*catch(ConnectionException e) {
 			e.printStackTrace();
 		}catch(Exception ee){
 			ee.printStackTrace();	
-		}finally {
+		}*/finally {
 			loginService.closeSFCE(connection);
 		}
 
 		if(errorCount>0) {
 			interfaceLogService.addInterfaceLog(errorIdList, errorPharm_cMessage, "Target");
 		}
-
+		//客户日志记录
+		ReadTxtConfig.inputTxt("导入对象：TARGET表\t\t导入成功条数:"+successCount+"\t条"+
+				"失败条数为"+errorCount+"条\t"+"\t结束时间:"+sdf.format(new Date()));
+		ReadTxtConfig.inputTxt("TARGET表数据导入结束\n\n");
 	} 
 
+	/**
+	 * 医院Mapping表
+	 * @param list
+	 * @param interfaceLogService
+	 * @throws ConnectionException
+	 */
 	@Async
 	@Transactional(propagation=Propagation.REQUIRES_NEW)  // 重启开启事物，如果存在事物，就停止当前事物
-	public void addInstitutionAgnmapping(List<InstitutionAgnmapping> list,InterfaceLogService interfaceLogService) {
+	@Retryable(value= {Exception.class,ConnectionException.class },maxAttempts=5,
+	backoff = @Backoff(delay = 5000,multiplier = 2))
+	public void addInstitutionAgnmapping(List<InstitutionAgnmapping> list,InterfaceLogService interfaceLogService) throws ConnectionException {
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+
 		SFCELoginService loginService=new SFCELoginService();
 		//登录saleforce
 		EnterpriseConnection connection=loginService.getconnection();
-		
 		//失败条数统计
 		int errorCount=0;
-
 		List<SARA_TempCode_Mapping__c> saraList=new ArrayList<>();
 		SARA_TempCode_Mapping__c saratm=null;
 		Calendar calendar=null;
@@ -952,15 +1020,31 @@ public class SaleforceAddAsync {
 					recordList.clear();
 				}
 			}
-		}catch(Exception e) {
+		}/*catch(Exception e) {
 			e.printStackTrace();
-		}finally {
+		}*/finally {
 			loginService.closeSFCE(connection);
 		}
 
 		logger.debug("此次医院数据表<Pharm__c>导入成功条数为\t"+successCount+"\t条"+
 				"\n失败条数为"+errorCount+"\t条"+"\n失败信息为:"+errorListMsg+"\n失败数据id为:\n"+errorListId+"\n版本号为:"+null);
+		//客户日志记录
+		ReadTxtConfig.inputTxt("导入对象：医院Mapping表\t\t导入成功条数:"+successCount+"\t条"+
+				"失败条数为"+errorCount+"条\t"+"\t结束时间:"+sdf.format(new Date()));
+		ReadTxtConfig.inputTxt("医院Mapping表数据导入结束\n\n");
+	}
 
+
+
+
+
+	/***
+	 * 重试网络异常
+	 * @param ne
+	 */
+	@Recover
+	public void recover(ConnectionException ne) {
+		ReadTxtConfig.inputTxt("网络异常 重试五次均失败  -_-");
 	}
 
 
