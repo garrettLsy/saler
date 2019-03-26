@@ -41,7 +41,7 @@ public class BlocService {
 
 	
 	public Map<String,Object> add(String beginTime,String endTime) throws ConnectionException {
-		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String toLeadDate=sdf.format(new Date());
 		Map<String,Object> map=new HashMap<>();
 		//查询本地数据库

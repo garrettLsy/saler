@@ -39,7 +39,7 @@ public class TargetService {
 	private SaleforceAddAsync addAsync;
 
 	public Map<String,Object> save(String beginTime,String endTime) throws ConnectionException{
-		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String toLeadDate=sdf.format(new Date());
 		Map<String,Object> map=new HashMap<>();
 		Example example=new Example(Target.class);

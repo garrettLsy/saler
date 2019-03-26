@@ -20,7 +20,8 @@ public class ReadTxtConfig {
 		BufferedReader br=null;
 		List<String> list=new ArrayList<>();
 		try { 
-			String pathname = "E:\\input.txt"; // 绝对路径或相对路径都可以，这里是绝对路径，写入文件时演示相对路径  
+			//String pathname = "E:\\input.txt"; // 绝对路径或相对路径都可以，这里是绝对路径，写入文件时演示相对路径 
+			String pathname = "D:\\sara\\input.txt";
 			File filename = new File(pathname); // 要读取以上路径的input。txt文件  
 			InputStreamReader reader = new InputStreamReader( new FileInputStream(filename),"UTF-8"); // 建立一个输入流对象reader  
 			br = new BufferedReader(reader); // 建立一个对象，它把文件内容转成计算机能读懂的语言  
@@ -50,7 +51,9 @@ public class ReadTxtConfig {
 	 */
 	public static void inputTxt(String log) {
 
-		File writename = new File("E:\\input.txt"); // 相对路径，如果没有则要建立一个新的output。txt文件 
+		//File writename = new File("E:\\input.txt"); // 相对路径，如果没有则要建立一个新的output。txt文件 
+		
+		File writename = new File("D:\\sara\\input.txt");
 		BufferedWriter out =null;
 		try {
 			if (!writename.exists()) {
