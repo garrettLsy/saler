@@ -19,6 +19,7 @@ import com.saler.service.DirectionService;
 import com.saler.service.DistributorsService;
 import com.saler.service.HospitalsService;
 import com.saler.service.InstitutionAgnmappingService;
+import com.saler.service.ProductHierarchyService;
 import com.saler.service.TXTInputService;
 import com.saler.service.TargetService;
 import com.saler.util.MD5Util;
@@ -47,6 +48,8 @@ public class DistributorsController {
 	private InstitutionAgnmappingService mappingService;
 	@Autowired
 	private TXTInputService txt;
+	@Autowired
+	private ProductHierarchyService hierarchySerivce;
 	@RequestMapping(value="/add",method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Object> getMaps(String objectType,String beginTime,String endTime) throws ConnectionException{
@@ -74,6 +77,8 @@ public class DistributorsController {
 				return targetService.save(beginTime, endTime);
 			}else if(objectType.equals("InstitutionAgnmapping")) {
 				return mappingService.add(beginTime, endTime);
+			}else if(objectType.equals("ProductHierarchy")) {
+				return hierarchySerivce.add();
 			}
 		}else {
 			//md5匹配不上

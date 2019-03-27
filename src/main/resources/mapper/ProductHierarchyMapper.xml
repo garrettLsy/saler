@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.saler.mapper.ProductHierarchyMapper">
+  <resultMap id="BaseResultMap" type="com.saler.pojo.ProductHierarchy">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="SKUID" jdbcType="NVARCHAR" property="skuid" />
+    <result column="NAMECN" jdbcType="NVARCHAR" property="namecn" />
+    <result column="NAMEEN" jdbcType="NVARCHAR" property="nameen" />
+    <result column="Prooduct_Name_CN" jdbcType="NVARCHAR" property="prooductNameCn" />
+    <result column="Prooduct_Name_EN" jdbcType="NVARCHAR" property="prooductNameEn" />
+    <result column="TA_Name_EN" jdbcType="NVARCHAR" property="taNameEn" />
+  </resultMap>
+</mapper>

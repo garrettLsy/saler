@@ -42,8 +42,7 @@ public class HospitalsService {
 	@Autowired
 	private SaleforceAddAsync addAsync;
 
-	@Retryable(value= {Exception.class,ConnectionException.class },maxAttempts=5,
-			backoff = @Backoff(delay = 5000,multiplier = 2))
+	
 	public Map<String,Object> add(String beginTime,String endTime) throws ConnectionException {
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String toLeadDate=sdf.format(new Date());

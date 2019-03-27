@@ -24,6 +24,7 @@ import com.saler.pojo.Direction;
 import com.saler.pojo.Distributors;
 import com.saler.pojo.Hospitals;
 import com.saler.pojo.InstitutionAgnmapping;
+import com.saler.pojo.ProductHierarchy;
 import com.saler.pojo.Target;
 import com.saler.service.InterfaceLogService;
 import com.saler.service.SFCELoginService;
@@ -34,6 +35,7 @@ import com.sforce.soap.enterprise.UpsertResult;
 import com.sforce.soap.enterprise.sobject.AMAP_Data__c;
 import com.sforce.soap.enterprise.sobject.Distributor__c;
 import com.sforce.soap.enterprise.sobject.Pharm__c;
+import com.sforce.soap.enterprise.sobject.SARA_Product__c;
 import com.sforce.soap.enterprise.sobject.SARA_Target_Hospital__c;
 import com.sforce.soap.enterprise.sobject.SARA_TempCode_Mapping__c;
 import com.sforce.ws.ConnectionException;
@@ -54,7 +56,7 @@ public class SaleforceAddAsync {
 	@Retryable(value= {Exception.class,ConnectionException.class },maxAttempts=5,
 	backoff = @Backoff(delay = 5000,multiplier = 2))
 	public void addBloc(List<Bloc> list,InterfaceLogService interfaceLogService) throws ConnectionException {
-		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		SFCELoginService loginService=new SFCELoginService();
 		//链接salesforc
 		EnterpriseConnection connection=loginService.getconnection();
@@ -216,7 +218,7 @@ public class SaleforceAddAsync {
 	@Retryable(value= {Exception.class,ConnectionException.class },maxAttempts=5,
 	backoff = @Backoff(delay = 5000,multiplier = 2))
 	public void addDirection(List<Direction> list,InterfaceLogService interfaceLogService,	String  timeVersion) throws ConnectionException {
-		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		SFCELoginService loginService=new SFCELoginService();
 		//链接salesforce
 		EnterpriseConnection connection=loginService.getconnection();
@@ -782,7 +784,7 @@ public class SaleforceAddAsync {
 	@Retryable(value= {Exception.class,ConnectionException.class },maxAttempts=5,
 	backoff = @Backoff(delay = 5000,multiplier = 2))
 	public void addtTarGet(List<Target> list,InterfaceLogService interfaceLogService) throws ConnectionException {
-		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		SFCELoginService loginService=new SFCELoginService();
 		//登录saleforce
 		EnterpriseConnection connection=loginService.getconnection();
@@ -923,7 +925,7 @@ public class SaleforceAddAsync {
 	@Retryable(value= {Exception.class,ConnectionException.class },maxAttempts=5,
 	backoff = @Backoff(delay = 5000,multiplier = 2))
 	public void addInstitutionAgnmapping(List<InstitutionAgnmapping> list,InterfaceLogService interfaceLogService) throws ConnectionException {
-		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 		SFCELoginService loginService=new SFCELoginService();
 		//登录saleforce
@@ -1033,8 +1035,112 @@ public class SaleforceAddAsync {
 				"失败条数为"+errorCount+"条\t"+"\t结束时间:"+sdf.format(new Date()));
 		ReadTxtConfig.inputTxt("医院Mapping表数据导入结束\n\n");
 	}
+	/**
+	 * 产品
+	 * @param list
+	 * @param interfaceLogService
+	 * @throws ConnectionException
+	 */
+	@Async
+	@Transactional(propagation=Propagation.REQUIRES_NEW)  // 重启开启事物，如果存在事物，就停止当前事物
+	@Retryable(value= {Exception.class,ConnectionException.class },maxAttempts=5,
+	backoff = @Backoff(delay = 5000,multiplier = 2))
+	public void addProductHierarchy(List<ProductHierarchy> list,InterfaceLogService interfaceLogService) throws ConnectionException {
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SFCELoginService loginService=new SFCELoginService();
+		//登录saleforce
+		EnterpriseConnection connection=loginService.getconnection();
+		//失败条数统计
+		int errorCount=0;
+		List<SARA_Product__c> saraList=new ArrayList<>();
+		SARA_Product__c product=null;
+		for(int i=0,a=list.size();i<a;i++) {
+			product=new SARA_Product__c();
+			product.setName(list.get(i).getProoductNameCn());
+			product.setProduct_Code__c(list.get(i).getSkuid());
+			product.setProduct_Name_EN__c(list.get(i).getProoductNameEn());
+			product.setShort_Name_EN__c(list.get(i).getNameen());
+			product.setGeneric_Name__c(list.get(i).getTaNameEn());
+			product.setSKU_Name__c(list.get(i).getNamecn());
+			product.setSKU_Name_EN__c(list.get(i).getNameen());
+			saraList.add(product);
+		}
+		
+		List<SARA_Product__c> recordList=new ArrayList<>();
+		SARA_Product__c [] saraArray=null;
+		//统计每次198插入多少次
+		int count=saraList.size()/198;
+		//统计每次198插入过后，余数
+		int remainder=saraList.size()%198;
+		//统计
+		int statistics=0;
+		//成功条数
+		int successCount=0;
+		//记录失败原Id
+		List<String> errorListId=new ArrayList<>();
+		//记录失败原因 
+		List<String> errorListMsg=new ArrayList<>();
+		try {
+			for(int i=0;i<saraList.size();i++) {
+				recordList.add(saraList.get(i));
+				if(recordList.size()>=198) {
+					//转换为数组格式
+					saraArray=recordList.toArray(new SARA_Product__c[recordList.size()]);
+					UpsertResult[] results=connection.upsert("Product_Code__c", saraArray);
+					for (int v=0; v< results.length; v++) {
+						if (results[v].isSuccess()) {
+							logger.debug(v+". Successfully created record - Id: " + results[v].getId());
+							successCount++;
+						} else {
+							com.sforce.soap.enterprise.Error[] errors = results[v].getErrors();
+							for (int j=0; j< errors.length; j++) {
+								logger.warn("第"+v+"条"+"ERROR creating record: " + errors[j].getMessage());
+								errorListId.add(saraArray[v].getProduct_Code__c());
+								errorListMsg.add(errors[j].getMessage());
+								errorCount++;
+							}
+						}    
+					}
+					saraArray.clone();
+					recordList.clear();
+					statistics++;
+				}else if(remainder==recordList.size()&&count==statistics) {
+					//转换为数组格式
+					saraArray=recordList.toArray(new SARA_Product__c[recordList.size()]);
+					//插入
+					UpsertResult[] results=connection.upsert("Product_Code__c", saraArray);
+					for (int v=0; v< results.length; v++) {
+						if (results[v].isSuccess()) {
+							logger.debug(v+". Successfully created record - Id: " + results[v].getId());
+							successCount++;
+						} else {
+							com.sforce.soap.enterprise.Error[] errors = results[v].getErrors();
+							for (int j=0; j< errors.length; j++) {
+								logger.warn("第"+v+"条"+"ERROR creating record: " + errors[j].getClass());
+								errorListId.add(saraArray[v].getProduct_Code__c());
+								errorListMsg.add(errors[j].getMessage());
+								errorCount++;
+							}
+						}    
+					}
 
+					saraArray.clone();
+					recordList.clear();
+				}
+			}
+		}/*catch(Exception e) {
+			e.printStackTrace();
+		}*/finally {
+			loginService.closeSFCE(connection);
+		}
 
+		logger.debug("此次产品表导入成功条数为\t"+successCount+"\t条"+
+				"\n失败条数为"+errorCount+"\t条"+"\n失败信息为:"+errorListMsg+"\n失败数据id为:\n"+errorListId+"\n版本号为:"+null);
+		//客户日志记录
+		ReadTxtConfig.inputTxt("导入对象：产品表\t\t导入成功条数:"+successCount+"\t条"+
+				"失败条数为"+errorCount+"条\t"+"\t结束时间:"+sdf.format(new Date()));
+		ReadTxtConfig.inputTxt("产品表数据导入结束\n\n");
+	}
 
 
 
