@@ -38,10 +38,7 @@ public class DirectionService extends LoggerUtil{
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String toLeadDate=sdf.format(new Date());
 		Map<String,Object> map=new HashMap<>();
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-		//以当前时间   获取版本号
-		String  timeVersion=formatter.format(new Date());
-		
+	
 		//查询本地数据库
 		Example example=new Example(Direction.class);
 		example.setOrderByClause("amap_id ASC");
@@ -58,9 +55,9 @@ public class DirectionService extends LoggerUtil{
 			System.out.println("木有灵魂的代码");	
 			e.printStackTrace();
 		}*/
-		map.put("flag", 0);
-		map.put("errorMsg","");
-		addAsync.addDirection(list, interfaceLogService, timeVersion);
+		map.put("flag", 200);
+		map.put("massage","数据正在导入请稍后刷新页面");
+		addAsync.addDirection(list, interfaceLogService);
 		ReadTxtConfig.inputTxt("流向数据数据正在导入中。。。。。。"+"\t\t导入时间为:"+toLeadDate);
 		return map;
 	}

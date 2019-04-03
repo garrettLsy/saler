@@ -9,8 +9,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -63,8 +61,8 @@ public class BlocService {
 			e.printStackTrace();
 		}*/
 		saleasync.addBloc(list,interfaceLogService);
-		map.put("flag", 0);
-		map.put("errorMsg","");
+		map.put("flag", 200);
+		map.put("massage","数据正在导入请稍后刷新页面");
 		ReadTxtConfig.inputTxt("医院集团关系表数据正在导入中。。。。。。"+"\t\t导入时间为:"+toLeadDate);
 		return map;
 	}

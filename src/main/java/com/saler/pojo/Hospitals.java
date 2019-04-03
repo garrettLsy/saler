@@ -73,6 +73,8 @@ public class Hospitals implements Serializable {
 
     private Date createon;
 
+    private Integer identifie;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -425,6 +427,20 @@ public class Hospitals implements Serializable {
         this.createon = createon;
     }
 
+    /**
+     * @return identifie
+     */
+    public Integer getIdentifie() {
+        return identifie;
+    }
+
+    /**
+     * @param identifie
+     */
+    public void setIdentifie(Integer identifie) {
+        this.identifie = identifie;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -456,6 +472,7 @@ public class Hospitals implements Serializable {
         sb.append(", modifyby=").append(modifyby);
         sb.append(", createby=").append(createby);
         sb.append(", createon=").append(createon);
+        sb.append(", identifie=").append(identifie);
         sb.append("]");
         return sb.toString();
     }

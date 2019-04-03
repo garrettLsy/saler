@@ -217,7 +217,11 @@ public class SaleforceAddAsync {
 	@Transactional(propagation=Propagation.REQUIRES_NEW)  // 重启开启事物，如果存在事物，就停止当前事物
 	@Retryable(value= {Exception.class,ConnectionException.class },maxAttempts=5,
 	backoff = @Backoff(delay = 5000,multiplier = 2))
-	public void addDirection(List<Direction> list,InterfaceLogService interfaceLogService,	String  timeVersion) throws ConnectionException {
+	public void addDirection(List<Direction> list,InterfaceLogService interfaceLogService) throws ConnectionException {
+		//以当前时间   获取版本号
+		logger.debug("direction");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+		String  timeVersion=formatter.format(new Date());
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		SFCELoginService loginService=new SFCELoginService();
 		//链接salesforce
@@ -225,6 +229,7 @@ public class SaleforceAddAsync {
 		List<AMAP_Data__c> clist=new ArrayList<>();
 		AMAP_Data__c c=null;
 		Calendar calendar=null;
+	//	connection.dele
 		for(int i=0;i<list.size();i++) {
 
 			c=new AMAP_Data__c();
@@ -682,6 +687,7 @@ public class SaleforceAddAsync {
 				}else {
 					c.setName("");
 				}
+				c.setIdentification__c(list.get(i).getIdentifie().toString());
 			}catch(Exception e) {
 				Map<String,Object> maps=new HashMap<>();
 				maps.put(list.get(i).getHospitalid(), "数据异常");

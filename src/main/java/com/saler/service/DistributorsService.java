@@ -62,8 +62,8 @@ public class DistributorsService {
 			System.out.println("没有灵魂的代码");
 		}*/
 		addAsync.adddistributors(list, interfaceLogService);
-		map.put("flag", 0);
-		map.put("errorMsg","");
+		map.put("flag", 200);
+		map.put("massage","数据正在导入请稍后刷新页面");
 		ReadTxtConfig.inputTxt("经销商数据正在导入中。。。。。。"+"\t\t导入时间为:"+toLeadDate);
 		return map;
 	}

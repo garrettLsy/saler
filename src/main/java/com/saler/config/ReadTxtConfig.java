@@ -5,9 +5,10 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;  
 
@@ -59,8 +60,8 @@ public class ReadTxtConfig {
 			if (!writename.exists()) {
 				writename.createNewFile();
 			}
-			out = new BufferedWriter(new FileWriter(writename,true));  
-			
+			//out = new BufferedWriter(new FileWriter(writename,true));  
+			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(writename,true),"utf-8"));
 			out.write(log+"\n"); // \r\n即为换行  
 			out.flush(); // 把缓存区内容压入文件  
 

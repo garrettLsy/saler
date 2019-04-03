@@ -61,10 +61,9 @@ public class HospitalsService {
 			System.out.println("没有灵魂的代码");
 		}*/
 		//
-		try {
+		
 			addAsync.addHospitals(list, interfaceLogService);
-		} catch (ConnectionException e) {
-		}
+		
 		map.put("flag", 200);
 		map.put("massage","数据正在导入请稍后刷新页面");
 		ReadTxtConfig.inputTxt("医院表数据正在导入中。。。。。。"+"\t\t导入时间为:"+toLeadDate);

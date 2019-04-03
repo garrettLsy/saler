@@ -30,5 +30,6 @@
     <result column="modifyby" jdbcType="NVARCHAR" property="modifyby" />
     <result column="createby" jdbcType="NVARCHAR" property="createby" />
     <result column="createon" jdbcType="TIMESTAMP" property="createon" />
+    <result column="identifie" jdbcType="INTEGER" property="identifie" />
   </resultMap>
 </mapper>

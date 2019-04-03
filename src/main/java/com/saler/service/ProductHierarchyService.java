@@ -5,16 +5,17 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.saler.async.SaleforceAddAsync;
 import com.saler.config.ReadTxtConfig;
 import com.saler.mapper.ProductHierarchyMapper;
 import com.saler.pojo.ProductHierarchy;
 import com.sforce.ws.ConnectionException;
-
+/**
+ *产品业务 
+ *
+ */
 @Service
 public class ProductHierarchyService {
 	@Autowired
@@ -28,7 +29,6 @@ public class ProductHierarchyService {
 			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String toLeadDate=sdf.format(new Date());
 			Map<String,Object> map=new HashMap<>();
-			//Example example=new Example(ProductHierarchy.class);
 			List<ProductHierarchy> list=hierarchyMapper.selectAll();
 			async.addProductHierarchy(list, interfaceLogService);
 			map.put("flag", 200);

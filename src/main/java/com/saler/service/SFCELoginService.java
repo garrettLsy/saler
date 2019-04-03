@@ -31,8 +31,10 @@ public class SFCELoginService {
 		/*PropertiesConfig pc=new PropertiesConfig("./application.properties");
 		String userName=(String)pc.getProperties().getProperty("salesforce.userName");
 		String userPassWord=pc.getProperties().getProperty("salesforce.password");*/
-		String userName="wilson.chen@allianture.com";
-		String userPassWord="demo12345PkYlAUnHjkfMV80KTCynK7Fpx";
+		/*String userName="wilson.chen@allianture.com";
+		String userPassWord="demo12345PkYlAUnHjkfMV80KTCynK7Fpx";*/
+		String userName="admin.pam@allergan.com.test";
+		String userPassWord="A&G^N#19";
 		ConnectorConfig SFDCConfig = new ConnectorConfig();
 		try {
 			logger.debug(userName);

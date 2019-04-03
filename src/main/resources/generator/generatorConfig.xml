@@ -61,7 +61,7 @@
 		<!-- 	<table tableName="direction"></table>
 			<table tableName="distributors"></table> -->
 	<!-- <table tableName="bloc"></table>  -->
-	 		<table tableName="product_hierarchy"></table> 
+	 		<table tableName="hospitals"></table> 
 	 		<!-- <table tableName="distributors"></table>   -->
 	</context>
 </generatorConfiguration>
